@@ -8,10 +8,13 @@
 
     <StackLayout>
         <forms:VideoView
-            Source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"
-            ShowControls="False" 
+            x:Name="VideoView"
+            ShowControls="True" 
             AutoPlay="True"
-            VerticalOptions="FillAndExpand"/>
+            VideoAspect="AspectFit"
+            BackgroundColor="Red"
+            VerticalOptions="FillAndExpand"
+            HorizontalOptions="FillAndExpand"/>
     </StackLayout>
 
 </ContentPage>
