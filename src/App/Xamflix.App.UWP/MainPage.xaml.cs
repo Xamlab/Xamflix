@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using MediaManager;
 
 namespace Xamflix.App.UWP
 {
@@ -20,7 +21,7 @@ namespace Xamflix.App.UWP
         public MainPage()
         {
             this.InitializeComponent();
-
+            CrossMediaManager.Current.Init();
             LoadApplication(new Forms.App());
         }
     }

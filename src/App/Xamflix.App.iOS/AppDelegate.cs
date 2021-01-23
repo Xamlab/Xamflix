@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Foundation;
+using MediaManager;
 using UIKit;
 
 namespace Xamflix.App.iOS
@@ -24,7 +25,7 @@ namespace Xamflix.App.iOS
         {
             global::Xamarin.Forms.Forms.Init();
             LoadApplication(new Forms.App());
-
+            CrossMediaManager.Current.Init();
             return base.FinishedLaunching(app, options);
         }
     }
