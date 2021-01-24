@@ -1,31 +1,107 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 
 <ContentPage
+    x:Class="Xamflix.App.Forms.MainPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:forms="clr-namespace:MediaManager.Forms;assembly=MediaManager.Forms"
-    xmlns:markup="clr-namespace:Xamflix.App.Forms.MarkupExtensions;assembly=Xamflix.App.Forms"
-    x:Class="Xamflix.App.Forms.MainPage">
+    xmlns:markup="clr-namespace:Xamflix.App.Forms.MarkupExtensions;assembly=Xamflix.App.Forms">
 
-    <Grid>
+    <Grid
+        ColumnSpacing="10"
+        HorizontalOptions="FillAndExpand"
+        RowSpacing="0"
+        VerticalOptions="FillAndExpand">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
         <forms:VideoView
             x:Name="TrailerVideoView"
-            ShowControls="False"
+            Grid.Row="0"
+            Grid.RowSpan="6"
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
             AutoPlay="True"
-            VideoAspect="AspectFill"
+            HorizontalOptions="FillAndExpand"
+            ShowControls="False"
             VerticalOptions="FillAndExpand"
-            HorizontalOptions="FillAndExpand" />
+            VideoAspect="AspectFill" />
         <Image
             x:Name="PosterImage"
-            Source="{markup:ImageResource 'the_midnight_sky_poster.png'}"
+            Grid.Row="0"
+            Grid.RowSpan="6"
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
             Aspect="AspectFill"
             HorizontalOptions="FillAndExpand"
-            VerticalOptions="FillAndExpand"/>
+            Source="{markup:ImageResource 'the_midnight_sky_poster.png'}"
+            VerticalOptions="FillAndExpand" />
         <Image
+            x:Name="TitleImage"
+            Grid.Row="1"
+            Grid.Column="0"
+            Margin="20,30,0,0"
+            HeightRequest="315"
+            HorizontalOptions="FillAndExpand"
             Source="{markup:ImageResource 'the_midnight_sky_title.png'}"
-            Margin="30,0,0, 50"
-            HorizontalOptions="Start"
-            VerticalOptions="End"/>
+            WidthRequest="432" />
+        <Label
+            x:Name="TitleLabel"
+            Grid.Row="2"
+            Grid.Column="0"
+            Margin="20,0,0,10"
+            FontAttributes="Bold"
+            FontSize="20"
+            HorizontalTextAlignment="Start"
+            Text="Watch movie 4 Now"
+            TextColor="White" />
+        <Label
+            x:Name="DescriptionLabel"
+            Grid.Row="3"
+            Grid.Column="0"
+            Margin="20,0,0,10"
+            FontSize="15"
+            LineBreakMode="WordWrap"
+            Text="In the aftermath of a global catastrophe,&#10;a lone scientist in the Arctic races to contact&#10;a crew of astronauts with a warning&#10;not to return to Earth." />
+        <StackLayout
+            x:Name="InfoContainer"
+            Grid.Row="4"
+            Grid.Column="0"
+            Padding="20,0,20,0"
+            Orientation="Horizontal"
+            Spacing="10">
+            <Button
+                x:Name="PlayButton"
+                BackgroundColor="#FFFFFF"
+                CornerRadius="5"
+                FontAttributes="Bold"
+                HeightRequest="44"
+                HorizontalOptions="Start"
+                Text="Play"
+                TextColor="Black"
+                WidthRequest="120" />
+            <Button
+                x:Name="MoreButton"
+                BackgroundColor="#545457"
+                CornerRadius="5"
+                FontAttributes="Bold"
+                HeightRequest="44"
+                HorizontalOptions="Start"
+                Text="More Info"
+                TextColor="#FFFFFF"
+                WidthRequest="150" />
+        </StackLayout>
+
     </Grid>
 
 </ContentPage>
