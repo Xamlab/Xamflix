@@ -12,7 +12,7 @@ namespace Xamflix.App.Forms
         {
             InitializeComponent();
             _media = new MediaItem(
-                "https://devstreaming-cdn.apple.com/videos/streaming/examples/bipbop_16x9/bipbop_16x9_variant.m3u8")
+                "https://xamflixdevgwcmedia-gewc1.streaming.media.azure.net/9f4ee191-59ff-48bf-bf53-2bfbec396d8b/The Midnight Sky  Final Trailer .ism/manifest(format=m3u8-aapl)")
             {
                 MediaType = MediaType.Hls
             };
