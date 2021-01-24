@@ -23,9 +23,9 @@
             VerticalOptions="FillAndExpand"/>
         <Image
             Source="{markup:ImageResource 'the_midnight_sky_title.png'}"
-            Margin="30,0,0, 50"
+            Margin="30,0,0, 0"
             HorizontalOptions="Start"
-            VerticalOptions="End"/>
+            VerticalOptions="Center"/>
     </Grid>
 
 </ContentPage>
