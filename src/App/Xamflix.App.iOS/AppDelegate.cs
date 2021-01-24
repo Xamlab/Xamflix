@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Foundation;
+﻿using Foundation;
 using MediaManager;
 using UIKit;
+using Xamarin.Forms.Platform.iOS;
 
 namespace Xamflix.App.iOS
 {
@@ -12,7 +9,7 @@ namespace Xamflix.App.iOS
     // User Interface of the application, as well as listening (and optionally responding) to 
     // application events from iOS.
     [Register("AppDelegate")]
-    public partial class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
+    public class AppDelegate : FormsApplicationDelegate
     {
         //
         // This method is invoked when the application has loaded and is ready to run. In this 
@@ -23,7 +20,7 @@ namespace Xamflix.App.iOS
         //
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
-            global::Xamarin.Forms.Forms.Init();
+            Xamarin.Forms.Forms.Init();
             LoadApplication(new Forms.App());
             CrossMediaManager.Current.Init();
             return base.FinishedLaunching(app, options);

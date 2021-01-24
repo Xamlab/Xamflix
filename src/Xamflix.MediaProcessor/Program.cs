@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Azure.Storage.Blobs;
-using Azure.Storage.Blobs.Models;
 using Microsoft.Azure.Management.Media;
 using Microsoft.Azure.Management.Media.Models;
 using Microsoft.Extensions.Configuration;
@@ -23,11 +22,11 @@ namespace Xamflix.MediaProcessor
         public static async Task Main(string[] args)
         {
             var configBuilder = new ConfigurationBuilder()
-                                .SetBasePath(Directory.GetCurrentDirectory())
-                                .AddJsonFile("appsettings.json", optional:true, reloadOnChange:true)
-                                .AddEnvironmentVariables()
-                                .Build();
-            MediaServiceConfiguration config = configBuilder.GetSection("MediaService").Get<MediaServiceConfiguration>();
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", true, true)
+                .AddEnvironmentVariables()
+                .Build();
+            var config = configBuilder.GetSection("MediaService").Get<MediaServiceConfiguration>();
 
             try
             {
@@ -36,17 +35,14 @@ namespace Xamflix.MediaProcessor
             catch (Exception exception)
             {
                 if (exception.Source.Contains("ActiveDirectory"))
-                {
-                    await Console.Error.WriteLineAsync("TIP: Make sure that you have filled out the appsettings.json file before running this sample.");
-                }
+                    await Console.Error.WriteLineAsync(
+                        "TIP: Make sure that you have filled out the appsettings.json file before running this sample.");
 
                 await Console.Error.WriteLineAsync($"{exception.Message}");
 
                 if (exception.GetBaseException() is ApiErrorException apiException)
-                {
                     await Console.Error.WriteLineAsync(
-                                                       $"ERROR: API call failed with error code '{apiException.Body.Error.Code}' and message '{apiException.Body.Error.Message}'.");
-                }
+                        $"ERROR: API call failed with error code '{apiException.Body.Error.Code}' and message '{apiException.Body.Error.Message}'.");
             }
 
             Console.WriteLine("Press Enter to continue.");
@@ -54,14 +50,14 @@ namespace Xamflix.MediaProcessor
         }
 
         /// <summary>
-        /// Run the sample async.
+        ///     Run the sample async.
         /// </summary>
         /// <param name="config">The parm is of type ConfigWrapper. This class reads values from local configuration file.</param>
         /// <returns></returns>
         // <RunAsync>
         private static async Task RunAsync(MediaServiceConfiguration config)
         {
-            IAzureMediaServicesClient client = await CreateMediaServicesClientAsync(config);
+            var client = await CreateMediaServicesClientAsync(config);
 
             // Set the polling interval for long running operations to 2 seconds.
             // The default value is 30 seconds for the .NET client SDK
@@ -69,29 +65,34 @@ namespace Xamflix.MediaProcessor
 
             // Creating a unique suffix so that we don't have name collisions if you run the sample
             // multiple times without cleaning up.
-            string uniqueness = Guid.NewGuid().ToString("N");
-            string jobName = $"job-{uniqueness}";
-            string locatorName = $"locator-{uniqueness}";
-            string outputAssetName = $"output-{uniqueness}";
-            string inputAssetName = $"input-{uniqueness}";
+            var uniqueness = Guid.NewGuid().ToString("N");
+            var jobName = $"job-{uniqueness}";
+            var locatorName = $"locator-{uniqueness}";
+            var outputAssetName = $"output-{uniqueness}";
+            var inputAssetName = $"input-{uniqueness}";
 
             // Ensure that you have the desired encoding Transform. This is really a one time setup operation.
-            _ = await GetOrCreateTransformAsync(client, config.ResourceGroup, config.AccountName, AdaptiveStreamingTransformName);
+            _ = await GetOrCreateTransformAsync(client, config.ResourceGroup, config.AccountName,
+                AdaptiveStreamingTransformName);
 
             // Create a new input Asset and upload the specified local video file into it.
-            _ = await CreateInputAssetAsync(client, config.ResourceGroup, config.AccountName, inputAssetName, InputMp4FileName);
+            _ = await CreateInputAssetAsync(client, config.ResourceGroup, config.AccountName, inputAssetName,
+                InputMp4FileName);
 
             // Use the name of the created input asset to create the job input.
-            _ = new JobInputAsset(assetName: inputAssetName);
+            _ = new JobInputAsset(inputAssetName);
 
             // Output from the encoding Job must be written to an Asset, so let's create one
-            Asset outputAsset = await CreateOutputAssetAsync(client, config.ResourceGroup, config.AccountName, outputAssetName);
+            var outputAsset =
+                await CreateOutputAssetAsync(client, config.ResourceGroup, config.AccountName, outputAssetName);
 
-            _ = await SubmitJobAsync(client, config.ResourceGroup, config.AccountName, AdaptiveStreamingTransformName, jobName, inputAssetName, outputAsset.Name);
+            _ = await SubmitJobAsync(client, config.ResourceGroup, config.AccountName, AdaptiveStreamingTransformName,
+                jobName, inputAssetName, outputAsset.Name);
             // In this demo code, we will poll for Job status
             // Polling is not a recommended best practice for production applications because of the latency it introduces.
             // Overuse of this API may trigger throttling. Developers should instead use Event Grid.
-            Job job = await WaitForJobToFinishAsync(client, config.ResourceGroup, config.AccountName, AdaptiveStreamingTransformName, jobName);
+            var job = await WaitForJobToFinishAsync(client, config.ResourceGroup, config.AccountName,
+                AdaptiveStreamingTransformName, jobName);
 
             if (job.State == JobState.Finished)
             {
@@ -99,10 +100,12 @@ namespace Xamflix.MediaProcessor
                 if (!Directory.Exists(OutputFolderName))
                     Directory.CreateDirectory(OutputFolderName);
 
-                await DownloadOutputAssetAsync(client, config.ResourceGroup, config.AccountName, outputAsset.Name, OutputFolderName);
+                await DownloadOutputAssetAsync(client, config.ResourceGroup, config.AccountName, outputAsset.Name,
+                    OutputFolderName);
 
-                StreamingLocator locator = await CreateStreamingLocatorAsync(client, config.ResourceGroup, config.AccountName, outputAsset.Name, locatorName);
-                
+                var locator = await CreateStreamingLocatorAsync(client, config.ResourceGroup, config.AccountName,
+                    outputAsset.Name, locatorName);
+
                 // Note that the URLs returned by this method include a /manifest path followed by a (format=)
                 // parameter that controls the type of manifest that is returned. 
                 // The /manifest(format=m3u8-aapl) will provide Apple HLS v4 manifest using MPEG TS segments.
@@ -110,24 +113,26 @@ namespace Xamflix.MediaProcessor
                 // And using just /manifest alone will return Microsoft Smooth Streaming format.
                 // There are additional formats available that are not returned in this call, please check the documentation
                 // on the dynamic packager for additional formats - see https://docs.microsoft.com/azure/media-services/latest/dynamic-packaging-overview
-                IList<string> urls = await GetStreamingUrlsAsync(client, config.ResourceGroup, config.AccountName, locator.Name);
-                foreach (var url in urls)
-                {
-                    Console.WriteLine(url);
-                }
+                var urls = await GetStreamingUrlsAsync(client, config.ResourceGroup, config.AccountName, locator.Name);
+                foreach (var url in urls) Console.WriteLine(url);
             }
 
-            Console.WriteLine("Done. Copy and paste the Streaming URL ending in '/manifest' into the Azure Media Player at 'http://aka.ms/azuremediaplayer'.");
-            Console.WriteLine("See the documentation on Dynamic Packaging for additional format support, including CMAF.");
-            Console.WriteLine("https://docs.microsoft.com/azure/media-services/latest/dynamic-packaging-overview");    
+            Console.WriteLine(
+                "Done. Copy and paste the Streaming URL ending in '/manifest' into the Azure Media Player at 'http://aka.ms/azuremediaplayer'.");
+            Console.WriteLine(
+                "See the documentation on Dynamic Packaging for additional format support, including CMAF.");
+            Console.WriteLine("https://docs.microsoft.com/azure/media-services/latest/dynamic-packaging-overview");
         }
         // </RunAsync>
 
         /// <summary>
-        /// Create the ServiceClientCredentials object based on the credentials
-        /// supplied in local configuration file.
+        ///     Create the ServiceClientCredentials object based on the credentials
+        ///     supplied in local configuration file.
         /// </summary>
-        /// <param name="config">The param is of type <see cref="MediaServiceConfiguration"/>. This class reads values from local configuration file.</param>
+        /// <param name="config">
+        ///     The param is of type <see cref="MediaServiceConfiguration" />. This class reads values from local
+        ///     configuration file.
+        /// </param>
         /// <returns></returns>
         // <GetCredentialsAsync>
         private static async Task<ServiceClientCredentials> GetCredentialsAsync(MediaServiceConfiguration config)
@@ -137,31 +142,36 @@ namespace Xamflix.MediaProcessor
             //// ApplicationTokenProvider.LoginSilentWithCertificateAsync
 
             // Use ApplicationTokenProvider.LoginSilentAsync to get a token using a service principal with symetric key
-            ClientCredential clientCredential = new ClientCredential(config.AadClientId, config.AadSecret);
-            return await ApplicationTokenProvider.LoginSilentAsync(config.AadTenantId, clientCredential, ActiveDirectoryServiceSettings.Azure);
+            var clientCredential = new ClientCredential(config.AadClientId, config.AadSecret);
+            return await ApplicationTokenProvider.LoginSilentAsync(config.AadTenantId, clientCredential,
+                ActiveDirectoryServiceSettings.Azure);
         }
         // </GetCredentialsAsync>
 
         /// <summary>
-        /// Creates the AzureMediaServicesClient object based on the credentials
-        /// supplied in local configuration file.
+        ///     Creates the AzureMediaServicesClient object based on the credentials
+        ///     supplied in local configuration file.
         /// </summary>
-        /// <param name="config">The param is of type <see cref="MediaServiceConfiguration"/>. This class reads values from local configuration file.</param>
+        /// <param name="config">
+        ///     The param is of type <see cref="MediaServiceConfiguration" />. This class reads values from local
+        ///     configuration file.
+        /// </param>
         /// <returns></returns>
         // <CreateMediaServicesClient>
-        private static async Task<IAzureMediaServicesClient> CreateMediaServicesClientAsync(MediaServiceConfiguration config)
+        private static async Task<IAzureMediaServicesClient> CreateMediaServicesClientAsync(
+            MediaServiceConfiguration config)
         {
             var credentials = await GetCredentialsAsync(config);
 
             return new AzureMediaServicesClient(config.ArmEndpoint, credentials)
             {
-                SubscriptionId = config.SubscriptionId,
+                SubscriptionId = config.SubscriptionId
             };
         }
         // </CreateMediaServicesClient>
 
         /// <summary>
-        /// Creates a new input Asset and uploads the specified local video file into it.
+        ///     Creates a new input Asset and uploads the specified local video file into it.
         /// </summary>
         /// <param name="client">The Media Services client.</param>
         /// <param name="resourceGroupName">The name of the resource group within the Azure subscription.</param>
@@ -186,7 +196,7 @@ namespace Xamflix.MediaProcessor
             // Call Media Services API to create an Asset.
             // This method creates a container in storage for the Asset.
             // The files (blobs) associated with the asset will be stored in this container.
-            Asset asset = await client.Assets.CreateOrUpdateAsync(resourceGroupName, accountName, assetName, new Asset());
+            var asset = await client.Assets.CreateOrUpdateAsync(resourceGroupName, accountName, assetName, new Asset());
 
             // Use Media Services API to get back a response that contains
             // SAS URL for the Asset container into which to upload blobs.
@@ -196,15 +206,15 @@ namespace Xamflix.MediaProcessor
                 resourceGroupName,
                 accountName,
                 assetName,
-                permissions: AssetContainerPermission.ReadWrite,
-                expiryTime: DateTime.UtcNow.AddHours(4).ToUniversalTime());
+                AssetContainerPermission.ReadWrite,
+                DateTime.UtcNow.AddHours(4).ToUniversalTime());
 
             var sasUri = new Uri(response.AssetContainerSasUrls.First());
 
             // Use Storage API to get a reference to the Asset container
             // that was created by calling Asset's CreateOrUpdate method.  
-            BlobContainerClient container = new BlobContainerClient(sasUri);
-            BlobClient blob = container.GetBlobClient(Path.GetFileName(fileToUpload));
+            var container = new BlobContainerClient(sasUri);
+            var blob = container.GetBlobClient(Path.GetFileName(fileToUpload));
 
             // Use Strorage API to upload the file into the container in storage.
             await blob.UploadAsync(fileToUpload);
@@ -214,7 +224,7 @@ namespace Xamflix.MediaProcessor
         // </CreateInputAsset>
 
         /// <summary>
-        /// Creates an ouput asset. The output from the encoding Job must be written to an Asset.
+        ///     Creates an ouput asset. The output from the encoding Job must be written to an Asset.
         /// </summary>
         /// <param name="client">The Media Services client.</param>
         /// <param name="resourceGroupName">The name of the resource group within the Azure subscription.</param>
@@ -222,19 +232,20 @@ namespace Xamflix.MediaProcessor
         /// <param name="assetName">The output asset name.</param>
         /// <returns></returns>
         // <CreateOutputAsset>
-        private static async Task<Asset> CreateOutputAssetAsync(IAzureMediaServicesClient client, string resourceGroupName, string accountName, string assetName)
+        private static async Task<Asset> CreateOutputAssetAsync(IAzureMediaServicesClient client,
+            string resourceGroupName, string accountName, string assetName)
         {
             // Check if an Asset already exists
-            Asset outputAsset = await client.Assets.GetAsync(resourceGroupName, accountName, assetName);
-            Asset asset = new Asset();
-            string outputAssetName = assetName;
+            var outputAsset = await client.Assets.GetAsync(resourceGroupName, accountName, assetName);
+            var asset = new Asset();
+            var outputAssetName = assetName;
 
             if (outputAsset != null)
             {
                 // Name collision! In order to get the sample to work, let's just go ahead and create a unique asset name
                 // Note that the returned Asset can have a different name than the one specified as an input parameter.
                 // You may want to update this part to throw an Exception instead, and handle name collisions differently.
-                string uniqueness = $"-{Guid.NewGuid():N}";
+                var uniqueness = $"-{Guid.NewGuid():N}";
                 outputAssetName += uniqueness;
 
                 Console.WriteLine("Warning – found an existing Asset with name = " + assetName);
@@ -246,9 +257,9 @@ namespace Xamflix.MediaProcessor
         // </CreateOutputAsset>
 
         /// <summary>
-        /// If the specified transform exists, get that transform.
-        /// If the it does not exist, creates a new transform with the specified output. 
-        /// In this case, the output is set to encode a video using one of the built-in encoding presets.
+        ///     If the specified transform exists, get that transform.
+        ///     If the it does not exist, creates a new transform with the specified output.
+        ///     In this case, the output is set to encode a video using one of the built-in encoding presets.
         /// </summary>
         /// <param name="client">The Media Services client.</param>
         /// <param name="resourceGroupName">The name of the resource group within the Azure subscription.</param>
@@ -264,18 +275,18 @@ namespace Xamflix.MediaProcessor
         {
             // Does a Transform already exist with the desired name? Assume that an existing Transform with the desired name
             // also uses the same recipe or Preset for processing content.
-            Transform transform = await client.Transforms.GetAsync(resourceGroupName, accountName, transformName);
+            var transform = await client.Transforms.GetAsync(resourceGroupName, accountName, transformName);
 
             if (transform == null)
             {
                 // You need to specify what you want it to produce as an output
-                TransformOutput[] output = new TransformOutput[]
+                TransformOutput[] output =
                 {
                     new TransformOutput
                     {
                         // The preset for the Transform is set to one of Media Services built-in sample presets.
                         // You can  customize the encoding settings by changing this to use "StandardEncoderPreset" class.
-                        Preset = new BuiltInStandardEncoderPreset()
+                        Preset = new BuiltInStandardEncoderPreset
                         {
                             // This sample uses the built-in encoding preset for Adaptive Bitrate Streaming.
                             PresetName = EncoderNamedPreset.AdaptiveStreaming
@@ -284,7 +295,8 @@ namespace Xamflix.MediaProcessor
                 };
 
                 // Create the Transform with the output defined above
-                transform = await client.Transforms.CreateOrUpdateAsync(resourceGroupName, accountName, transformName, output);
+                transform = await client.Transforms.CreateOrUpdateAsync(resourceGroupName, accountName, transformName,
+                    output);
             }
 
             return transform;
@@ -292,7 +304,7 @@ namespace Xamflix.MediaProcessor
         // </EnsureTransformExists>
 
         /// <summary>
-        /// Submits a request to Media Services to apply the specified Transform to a given input video.
+        ///     Submits a request to Media Services to apply the specified Transform to a given input video.
         /// </summary>
         /// <param name="client">The Media Services client.</param>
         /// <param name="resourceGroupName">The name of the resource group within the Azure subscription.</param>
@@ -311,11 +323,11 @@ namespace Xamflix.MediaProcessor
             string outputAssetName)
         {
             // Use the name of the created input asset to create the job input.
-            JobInput jobInput = new JobInputAsset(assetName: inputAssetName);
+            JobInput jobInput = new JobInputAsset(inputAssetName);
 
             JobOutput[] jobOutputs =
             {
-                new JobOutputAsset(outputAssetName),
+                new JobOutputAsset(outputAssetName)
             };
 
             // In this example, we are assuming that the job name is unique.
@@ -323,7 +335,7 @@ namespace Xamflix.MediaProcessor
             // If you already have a job with the desired name, use the Jobs.Get method
             // to get the existing job. In Media Services v3, the Get method on entities returns null 
             // if the entity doesn't exist (a case-insensitive check on the name).
-            Job job = await client.Jobs.CreateAsync(
+            var job = await client.Jobs.CreateAsync(
                 resourceGroupName,
                 accountName,
                 transformName,
@@ -331,7 +343,7 @@ namespace Xamflix.MediaProcessor
                 new Job
                 {
                     Input = jobInput,
-                    Outputs = jobOutputs,
+                    Outputs = jobOutputs
                 });
 
             return job;
@@ -339,7 +351,7 @@ namespace Xamflix.MediaProcessor
         // </SubmitJob>
 
         /// <summary>
-        /// Polls Media Services for the status of the Job.
+        ///     Polls Media Services for the status of the Job.
         /// </summary>
         /// <param name="client">The Media Services client.</param>
         /// <param name="resourceGroupName">The name of the resource group within the Azure subscription.</param>
@@ -362,32 +374,26 @@ namespace Xamflix.MediaProcessor
                 job = await client.Jobs.GetAsync(resourceGroupName, accountName, transformName, jobName);
 
                 Console.WriteLine($"Job is '{job.State}'.");
-                for (int i = 0; i < job.Outputs.Count; i++)
+                for (var i = 0; i < job.Outputs.Count; i++)
                 {
-                    JobOutput output = job.Outputs[i];
+                    var output = job.Outputs[i];
                     Console.Write($"\tJobOutput[{i}] is '{output.State}'.");
-                    if (output.State == JobState.Processing)
-                    {
-                        Console.Write($"  Progress (%): '{output.Progress}'.");
-                    }
+                    if (output.State == JobState.Processing) Console.Write($"  Progress (%): '{output.Progress}'.");
 
                     Console.WriteLine();
                 }
 
                 if (job.State != JobState.Finished && job.State != JobState.Error && job.State != JobState.Canceled)
-                {
                     await Task.Delay(SleepIntervalMs);
-                }
-            }
-            while (job.State != JobState.Finished && job.State != JobState.Error && job.State != JobState.Canceled);
+            } while (job.State != JobState.Finished && job.State != JobState.Error && job.State != JobState.Canceled);
 
             return job;
         }
         // </WaitForJobToFinish>
 
         /// <summary>
-        /// Creates a StreamingLocator for the specified asset and with the specified streaming policy name.
-        /// Once the StreamingLocator is created the output asset is available to clients for playback.
+        ///     Creates a StreamingLocator for the specified asset and with the specified streaming policy name.
+        ///     Once the StreamingLocator is created the output asset is available to clients for playback.
         /// </summary>
         /// <param name="client">The Media Services client.</param>
         /// <param name="resourceGroupName">The name of the resource group within the Azure subscription.</param>
@@ -403,7 +409,7 @@ namespace Xamflix.MediaProcessor
             string assetName,
             string locatorName)
         {
-            StreamingLocator locator = await client.StreamingLocators.CreateAsync(
+            var locator = await client.StreamingLocators.CreateAsync(
                 resourceGroup,
                 accountName,
                 locatorName,
@@ -418,9 +424,9 @@ namespace Xamflix.MediaProcessor
         // </CreateStreamingLocator>
 
         /// <summary>
-        /// Checks if the "default" streaming endpoint is in the running state,
-        /// if not, starts it.
-        /// Then, builds the streaming URLs.
+        ///     Checks if the "default" streaming endpoint is in the running state,
+        ///     if not, starts it.
+        ///     Then, builds the streaming URLs.
         /// </summary>
         /// <param name="client">The Media Services client.</param>
         /// <param name="resourceGroupName">The name of the resource group within the Azure subscription.</param>
@@ -432,27 +438,25 @@ namespace Xamflix.MediaProcessor
             IAzureMediaServicesClient client,
             string resourceGroupName,
             string accountName,
-            String locatorName)
+            string locatorName)
         {
             const string DefaultStreamingEndpointName = "default";
 
             IList<string> streamingUrls = new List<string>();
 
-            StreamingEndpoint streamingEndpoint = await client.StreamingEndpoints.GetAsync(resourceGroupName, accountName, DefaultStreamingEndpointName);
+            var streamingEndpoint =
+                await client.StreamingEndpoints.GetAsync(resourceGroupName, accountName, DefaultStreamingEndpointName);
 
             if (streamingEndpoint != null)
-            {
                 if (streamingEndpoint.ResourceState != StreamingEndpointResourceState.Running)
-                {
-                    await client.StreamingEndpoints.StartAsync(resourceGroupName, accountName, DefaultStreamingEndpointName);
-                }
-            }
+                    await client.StreamingEndpoints.StartAsync(resourceGroupName, accountName,
+                        DefaultStreamingEndpointName);
 
-            ListPathsResponse paths = await client.StreamingLocators.ListPathsAsync(resourceGroupName, accountName, locatorName);
+            var paths = await client.StreamingLocators.ListPathsAsync(resourceGroupName, accountName, locatorName);
 
-            foreach (StreamingPath path in paths.StreamingPaths)
+            foreach (var path in paths.StreamingPaths)
             {
-                UriBuilder uriBuilder = new UriBuilder
+                var uriBuilder = new UriBuilder
                 {
                     Scheme = "https",
                     Host = streamingEndpoint.HostName,
@@ -467,7 +471,7 @@ namespace Xamflix.MediaProcessor
         // </GetStreamingURLs>
 
         /// <summary>
-        ///  Downloads the results from the specified output asset, so you can see what you got.
+        ///     Downloads the results from the specified output asset, so you can see what you got.
         /// </summary>
         /// <param name="client">The Media Services client.</param>
         /// <param name="resourceGroupName">The name of the resource group within the Azure subscription.</param>
@@ -482,22 +486,19 @@ namespace Xamflix.MediaProcessor
             string assetName,
             string outputFolderName)
         {
-            if (!Directory.Exists(outputFolderName))
-            {
-                Directory.CreateDirectory(outputFolderName);
-            }
+            if (!Directory.Exists(outputFolderName)) Directory.CreateDirectory(outputFolderName);
 
-            AssetContainerSas assetContainerSas = await client.Assets.ListContainerSasAsync(
+            var assetContainerSas = await client.Assets.ListContainerSasAsync(
                 resourceGroup,
                 accountName,
                 assetName,
-                permissions: AssetContainerPermission.Read,
-                expiryTime: DateTime.UtcNow.AddHours(1).ToUniversalTime());
+                AssetContainerPermission.Read,
+                DateTime.UtcNow.AddHours(1).ToUniversalTime());
 
-            Uri containerSasUrl = new Uri(assetContainerSas.AssetContainerSasUrls.FirstOrDefault());
-            BlobContainerClient container = new BlobContainerClient(containerSasUrl);
+            var containerSasUrl = new Uri(assetContainerSas.AssetContainerSasUrls.FirstOrDefault());
+            var container = new BlobContainerClient(containerSasUrl);
 
-            string directory = Path.Combine(outputFolderName, assetName);
+            var directory = Path.Combine(outputFolderName, assetName);
             Directory.CreateDirectory(directory);
 
             Console.WriteLine($"Downloading output results to '{directory}'...");
@@ -509,19 +510,19 @@ namespace Xamflix.MediaProcessor
             {
                 var resultSegment = container.GetBlobs().AsPages(continuationToken);
 
-                foreach (Azure.Page<BlobItem> blobPage in resultSegment)
+                foreach (var blobPage in resultSegment)
                 {
-                    foreach (BlobItem blobItem in blobPage.Values)
+                    foreach (var blobItem in blobPage.Values)
                     {
                         var blobClient = container.GetBlobClient(blobItem.Name);
-                        string filename = Path.Combine(directory, blobItem.Name);
+                        var filename = Path.Combine(directory, blobItem.Name);
 
                         downloadTasks.Add(blobClient.DownloadToAsync(filename));
                     }
+
                     // Get the continuation token and loop until it is empty.
                     continuationToken = blobPage.ContinuationToken;
                 }
-
             } while (continuationToken != "");
 
             await Task.WhenAll(downloadTasks);
@@ -531,9 +532,10 @@ namespace Xamflix.MediaProcessor
         // </DownloadResults>
 
         /// <summary>
-        /// Deletes the jobs, assets and potentially the content key policy that were created.
-        /// Generally, you should clean up everything except objects 
-        /// that you are planning to reuse (typically, you will reuse Transforms, and you will persist output assets and StreamingLocators).
+        ///     Deletes the jobs, assets and potentially the content key policy that were created.
+        ///     Generally, you should clean up everything except objects
+        ///     that you are planning to reuse (typically, you will reuse Transforms, and you will persist output assets and
+        ///     StreamingLocators).
         /// </summary>
         /// <param name="client"></param>
         /// <param name="resourceGroupName"></param>
@@ -545,28 +547,24 @@ namespace Xamflix.MediaProcessor
         /// <returns></returns>
         // <CleanUp>
         private static async Task CleanUpAsync(
-           IAzureMediaServicesClient client,
-           string resourceGroupName,
-           string accountName,
-           string transformName,
-           string jobName,
-           List<string> assetNames,
-           string contentKeyPolicyName = null
-           )
+            IAzureMediaServicesClient client,
+            string resourceGroupName,
+            string accountName,
+            string transformName,
+            string jobName,
+            List<string> assetNames,
+            string contentKeyPolicyName = null
+        )
         {
             await client.Jobs.DeleteAsync(resourceGroupName, accountName, transformName, jobName);
 
             foreach (var assetName in assetNames)
-            {
                 await client.Assets.DeleteAsync(resourceGroupName, accountName, assetName);
-            }
 
             if (contentKeyPolicyName != null)
-            {
                 client.ContentKeyPolicies.Delete(resourceGroupName, accountName, contentKeyPolicyName);
-            }
         }
-        // </CleanUp>
 
+        // </CleanUp>
     }
 }

@@ -4,17 +4,22 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:forms="clr-namespace:MediaManager.Forms;assembly=MediaManager.Forms"
+    xmlns:markup="clr-namespace:Xamflix.App.Forms.MarkupExtensions;assembly=Xamflix.App.Forms"
     x:Class="Xamflix.App.Forms.MainPage">
 
-    <StackLayout>
+    <Grid>
         <forms:VideoView
             x:Name="VideoView"
-            ShowControls="True" 
+            ShowControls="False"
             AutoPlay="True"
-            VideoAspect="AspectFit"
-            BackgroundColor="Red"
+            VideoAspect="AspectFill"
             VerticalOptions="FillAndExpand"
-            HorizontalOptions="FillAndExpand"/>
-    </StackLayout>
+            HorizontalOptions="FillAndExpand" />
+        <Image
+            Source="{markup:ImageResource 'the_midnight_sky.png'}"
+            Margin="30,0,0, 50"
+            HorizontalOptions="Start"
+            VerticalOptions="End"/>
+    </Grid>
 
 </ContentPage>

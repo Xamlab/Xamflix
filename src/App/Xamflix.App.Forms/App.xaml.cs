@@ -8,16 +8,7 @@ namespace Xamflix.App.Forms
         {
             InitializeComponent();
 
-            var viewButton = new Button
-            {
-                Text = "View Video"
-            };
-            var contentPage = new ContentPage
-            {
-                Content = viewButton
-            };
-            viewButton.Command = new Command(() => contentPage.Navigation.PushAsync(new MainPage()));
-            MainPage = new NavigationPage(contentPage);
+            MainPage = new MainPage();
         }
 
         protected override void OnStart()
