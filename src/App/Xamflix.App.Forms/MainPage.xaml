@@ -9,14 +9,20 @@
 
     <Grid>
         <forms:VideoView
-            x:Name="VideoView"
+            x:Name="TrailerVideoView"
             ShowControls="False"
             AutoPlay="True"
             VideoAspect="AspectFill"
             VerticalOptions="FillAndExpand"
             HorizontalOptions="FillAndExpand" />
         <Image
-            Source="{markup:ImageResource 'the_midnight_sky.png'}"
+            x:Name="PosterImage"
+            Source="{markup:ImageResource 'the_midnight_sky_poster.png'}"
+            Aspect="AspectFill"
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="FillAndExpand"/>
+        <Image
+            Source="{markup:ImageResource 'the_midnight_sky_title.png'}"
             Margin="30,0,0, 50"
             HorizontalOptions="Start"
             VerticalOptions="End"/>

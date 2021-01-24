@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -16,9 +16,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Images\the_midnight_sky_poster.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Plugin.MediaManager" Version="1.0.8" />
     <PackageReference Include="Plugin.MediaManager.AzureMediaServices" Version="1.0.6" />
     <PackageReference Include="Plugin.MediaManager.Forms" Version="1.0.8" />
+    <PackageReference Include="System.Text.Json" Version="5.0.1" />
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.1905" />
     <PackageReference Include="Xamarin.Essentials" Version="1.6.0" />
   </ItemGroup>
