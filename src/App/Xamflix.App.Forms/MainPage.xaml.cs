@@ -71,15 +71,15 @@ namespace Xamflix.App.Forms
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            await Task.Delay(2000);
-            var media = new MediaItem(
-                Uri.EscapeUriString(
-                    @"https://xamflixdevgwcmedia-gewc1.streaming.media.azure.net/9f4ee191-59ff-48bf-bf53-2bfbec396d8b/The Midnight Sky  Final Trailer .ism/manifest(format=m3u8-aapl)"))
-            {
-                MediaType = MediaType.Hls
-            };
-            TrailerVideoView.Source = media;
-            Trace.WriteLine($"Setting media item  {JsonSerializer.Serialize(media)}");
+            //await Task.Delay(2000);
+            //var media = new MediaItem(
+            //    Uri.EscapeUriString(
+            //        @"https://xamflixdevgwcmedia-gewc1.streaming.media.azure.net/9f4ee191-59ff-48bf-bf53-2bfbec396d8b/The Midnight Sky  Final Trailer .ism/manifest(format=m3u8-aapl)"))
+            //{
+            //    MediaType = MediaType.Hls
+            //};
+            //TrailerVideoView.Source = media;
+            //Trace.WriteLine($"Setting media item  {JsonSerializer.Serialize(media)}");
         }
     }
 }

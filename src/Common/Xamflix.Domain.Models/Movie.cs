@@ -7,6 +7,7 @@ namespace Xamflix.Domain.Models
     public class Movie : RealmObject
     {
         [PrimaryKey] [MapTo("_id")] public ObjectId Id { get; set; }
+        [Required] [MapTo("_partitionKey")] public string PartitionKey { get; set; } = null!;
 
         [Required] public string Name { get; set; } = null!;
 

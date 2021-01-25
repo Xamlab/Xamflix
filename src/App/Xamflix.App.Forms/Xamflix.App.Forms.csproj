@@ -17,6 +17,8 @@
     <EmbeddedResource Include="**\*.png" />
     <None Remove="appsettings.json" />
     <EmbeddedResource Include="appsettings.json" />
+    <None Remove="appsettings.local.json" />
+    <EmbeddedResource Include="appsettings.local.json" />
   </ItemGroup>
 
   <ItemGroup>

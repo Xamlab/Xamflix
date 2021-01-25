@@ -42,6 +42,7 @@ namespace Xamflix.App.Forms
                 movie = new Movie
                         {
                             Id = movieId,
+                            PartitionKey = "DASHBOARD",
                             Name = "The Midnight Sky",
                             Year = 2020,
                             DurationInSeconds = 122 * 60,

@@ -18,9 +18,9 @@ namespace Xamflix.App.Forms
 
         public static IServiceCollection RegisterFormsDependencies(this IServiceCollection services)
         {
-            return "development".SetupFormsConfigs()
-                                .BuildAndRegister(services)
-                                .AddRealm();
+            return "local".SetupFormsConfigs()
+                          .BuildAndRegister(services)
+                          .AddRealm();
         }
     }
 }

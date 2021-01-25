@@ -14,7 +14,7 @@ namespace Xamflix.Domain.Data.Realm.Implementation
 
         public async Task<Realms.Realm> GetDefaultRealmAsync()
         {
-            return _realm ??= await Realms.Realm.GetInstanceAsync(_realmConfigurationFactory.GetDefaultConfiguration());
+            return _realm ??= await Realms.Realm.GetInstanceAsync(await _realmConfigurationFactory.GetDefaultConfigurationAsync());
         }
     }
 }

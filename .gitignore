@@ -3,6 +3,7 @@
 
 #Generated files
 *.realm.lock
+appsettings.local.json
 
 # User-specific files
 *.suo
