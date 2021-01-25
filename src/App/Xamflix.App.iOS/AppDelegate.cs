@@ -2,6 +2,7 @@
 using MediaManager;
 using UIKit;
 using Xamarin.Forms.Platform.iOS;
+using Xamflix.App.Forms;
 
 namespace Xamflix.App.iOS
 {
@@ -21,8 +22,16 @@ namespace Xamflix.App.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             Xamarin.Forms.Forms.Init();
-            LoadApplication(new Forms.App());
+            
+            Forms.Bootstrapper.CreateContainer()
+                 .RegisterFormsDependencies()
+                 .RegisterIosDependencies()
+                 .BuildContainer();
+
+            var application = new Forms.App();
+            LoadApplication(application);
             CrossMediaManager.Current.Init();
+            
             return base.FinishedLaunching(app, options);
         }
     }

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Xamflix.Domain.Data.Realm.Implementation
 {
-    public class RealmMigrationFactory
+    public class RealmMigrationFactory : IRealmMigrationFactory
     {
         public IEnumerable<IMigration> GetMigrations()
         {

@@ -1,26 +1,27 @@
-using System;
-using System.Linq;
 using Realms;
+using Xamflix.Core.Services;
 
 namespace Xamflix.Domain.Data.Realm.Implementation
 {
-    internal class RealmConfigurationFactory
+    internal class RealmConfigurationFactory : IRealmConfigurationFactory
     {
         private readonly RealmDbConfiguration _configuration;
-        private readonly RealmMigrationFactory _migrationFactory;
-        private readonly Type[] _realmTypes;
+        private readonly ISystemPathService _systemPathService;
+        private readonly IRealmMigrationFactory _migrationFactory;
 
         public RealmConfigurationFactory(RealmDbConfiguration configuration,
-                                         RealmMigrationFactory migrationFactory)
+                                         ISystemPathService systemPathService,
+                                         IRealmMigrationFactory migrationFactory)
         {
             _configuration = configuration;
+            _systemPathService = systemPathService;
             _migrationFactory = migrationFactory;
-            _realmTypes = GetType().Assembly.GetTypes().Where(type => type.IsSubclassOf(typeof(RealmObject))).ToArray();
         }
 
         public RealmConfigurationBase GetDefaultConfiguration()
         {
-            return GetConfigurationWithPath(_configuration.LocalDbPath);
+            var localDbPath = _systemPathService.GetLocalPath(_configuration.DbFileName);
+            return GetConfigurationWithPath(localDbPath);
         }
 
         public RealmConfigurationBase GetConfigurationWithPath(string realmDbPath)
@@ -29,7 +30,7 @@ namespace Xamflix.Domain.Data.Realm.Implementation
                    {
                        SchemaVersion = _configuration.SchemaVersion,
                        MigrationCallback = MigrationCallback,
-                       ObjectClasses = _realmTypes
+                       ObjectClasses = _configuration.RealmTypes
                    };
         }
 

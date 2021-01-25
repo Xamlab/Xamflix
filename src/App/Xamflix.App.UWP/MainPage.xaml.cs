@@ -1,4 +1,5 @@
 ﻿using MediaManager;
+using Xamflix.App.Forms;
 
 namespace Xamflix.App.UWP
 {
@@ -7,6 +8,12 @@ namespace Xamflix.App.UWP
         public MainPage()
         {
             InitializeComponent();
+            
+            Forms.Bootstrapper.CreateContainer()
+                 .RegisterFormsDependencies()
+                 .RegisterUWPDependencies()
+                 .BuildContainer();
+            
             CrossMediaManager.Current.Init();
             LoadApplication(new Forms.App());
         }

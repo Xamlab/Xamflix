@@ -5,7 +5,7 @@ namespace Xamflix.Domain.Data
 {
     public static class DbContextExtensions
     {
-        public static async Task RunInTransactionAsync(this IAppDbContext dbContext, Action<ITransaction?> action, ITransaction? transaction)
+        public static async Task RunInTransactionAsync(this IAppDbContext dbContext, Action<ITransaction> action, ITransaction? transaction = null)
         {
             //We should commit and dispose the transaction only if we create it ourselves, that is it's an inbound transaction
             //if the transaction is provided by the caller, it's the responsibility of the caller to commit and dispose it
@@ -15,7 +15,7 @@ namespace Xamflix.Domain.Data
             bool isInboundTransaction = shouldCreateInboundTransaction && !outboundTransactionExists;
             try
             {
-                action(transaction);
+                action(transaction!);
                 if(isInboundTransaction)
                 {
                     await transaction!.CommitAsync();
@@ -30,7 +30,7 @@ namespace Xamflix.Domain.Data
             }
         }
 
-        public static async Task RunInTransactionAsync(this IAppDbContext dbContext, Func<ITransaction?, Task> action, ITransaction? transaction)
+        public static async Task RunInTransactionAsync(this IAppDbContext dbContext, Func<ITransaction, Task> action, ITransaction? transaction = null)
         {
             //We should commit and dispose the transaction only if we create it ourselves
             //if the transaction is provided by the caller, it's the responsibility of the caller to commit and dispose it
@@ -40,7 +40,7 @@ namespace Xamflix.Domain.Data
             bool isInboundTransaction = shouldCreateInboundTransaction && !outboundTransactionExists;
             try
             {
-                await action(transaction);
+                await action(transaction!);
                 if(isInboundTransaction)
                 {
                     await transaction!.CommitAsync();
