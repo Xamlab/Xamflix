@@ -8,6 +8,7 @@
     xmlns:markup="clr-namespace:Xamflix.App.Forms.MarkupExtensions;assembly=Xamflix.App.Forms">
 
     <Grid
+        x:Name="ParentGrid"
         ColumnSpacing="10"
         HorizontalOptions="FillAndExpand"
         RowSpacing="0"
@@ -50,11 +51,13 @@
             x:Name="TitleImage"
             Grid.Row="1"
             Grid.Column="0"
-            Margin="20,30,0,0"
-            HeightRequest="315"
+            Margin="20,120,0,0"
+            AnchorX="0"
+            AnchorY="1"
             HorizontalOptions="FillAndExpand"
-            Source="{markup:ImageResource 'the_midnight_sky_title.png'}"
-            WidthRequest="432" />
+            HeightRequest="260"
+            WidthRequest="650"
+            Source="{markup:ImageResource 'the_midnight_sky_title.png'}" />
         <Label
             x:Name="TitleLabel"
             Grid.Row="2"

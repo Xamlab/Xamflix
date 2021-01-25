@@ -16,6 +16,7 @@ namespace Xamflix.App.Forms
     {
         public MainPage()
         {
+            
             InitializeComponent();
             CrossMediaManager.Current.BufferedChanged += CurrentOnBufferedChanged;
             CrossMediaManager.Current.MediaItemChanged += CurrentOnMediaItemChanged;
@@ -27,20 +28,20 @@ namespace Xamflix.App.Forms
 
         private async void CurrentOnStateChanged(object sender, StateChangedEventArgs e)
         {
-            switch (e.State)
+            switch(e.State)
             {
                 case MediaPlayerState.Playing:
-                    {
-                        await PosterImage.FadeTo(0);
-                        await ScaleDownTitleImageAsync();
-                        break;
-                    }
+                {
+                    await PosterImage.FadeTo(0);
+                    await ScaleDownTitleImageAsync();
+                    break;
+                }
                 default:
 
-                    {
-                        await PosterImage.FadeTo(1);
-                        break;
-                    }
+                {
+                    await PosterImage.FadeTo(1);
+                    break;
+                }
             }
         }
 
@@ -57,7 +58,7 @@ namespace Xamflix.App.Forms
         private void CurrentOnMediaItemFailed(object sender, MediaItemFailedEventArgs e)
         {
             Trace.WriteLine(
-                $"CurrentOnMediaItemFailed  {e.Message} {e.Exeption} {JsonSerializer.Serialize(e.MediaItem)}");
+                            $"CurrentOnMediaItemFailed  {e.Message} {e.Exeption} {JsonSerializer.Serialize(e.MediaItem)}");
         }
 
         private void CurrentOnMediaItemChanged(object sender, MediaItemEventArgs e)
@@ -75,36 +76,34 @@ namespace Xamflix.App.Forms
             base.OnAppearing();
             await Task.Delay(1000);
             var media = new MediaItem(
-                Uri.EscapeUriString(
-                    @"https://xamflixdevgwcmedia-gewc1.streaming.media.azure.net/9f4ee191-59ff-48bf-bf53-2bfbec396d8b/The Midnight Sky  Final Trailer .ism/manifest(format=m3u8-aapl)"))
-            {
-                MediaType = MediaType.Hls
-            };
+                                      Uri.EscapeUriString(
+                                                          @"https://xamflixdevgwcmedia-gewc1.streaming.media.azure.net/9f4ee191-59ff-48bf-bf53-2bfbec396d8b/The Midnight Sky  Final Trailer .ism/manifest(format=m3u8-aapl)"))
+                        {
+                            MediaType = MediaType.Hls
+                        };
             TrailerVideoView.Source = media;
             Trace.WriteLine($"Setting media item  {JsonSerializer.Serialize(media)}");
         }
 
         private async Task ScaleDownTitleImageAsync()
         {
-            await Task.Delay(10000);
+            await Task.Delay(1000);
             var parentAnimation = new Animation();
-            
 
             // Title Image
-            var imageAnimation1 = new Animation(v => TitleImage.WidthRequest = v, TitleImage.WidthRequest, 259, Easing.CubicOut);
-            var imageAnimation2 = new Animation(v => TitleImage.HeightRequest = v, TitleImage.HeightRequest, 189, Easing.CubicOut);
-            var imageAnimation3 = new Animation(v => TitleImage.Opacity = v, 1, 0.6, Easing.Linear);
-
+            var imageAnimation1 = new Animation(v => TitleImage.Scale = v, 1, 0.7, Easing.CubicOut);
+            var imageAnimation2 = new Animation(v => TitleImage.Opacity = v, 1, 0.6, Easing.Linear);
+            
             // Title Label
             var titleLabelAnimation1 = new Animation(v => TitleLabel.Opacity = v, 1, 0, Easing.Linear);
-            var titleLabelAnimation2 = new Animation(v => TitleLabel.TranslationY = v, TitleLabel.TranslationY, -50, Easing.Linear);
+            var titleLabelAnimation2 = new Animation(v => TitleLabel.TranslationY = v, TitleLabel.TranslationY, 50, Easing.Linear);
 
             // Title Description
             var descriptionAnimation1 = new Animation(v => DescriptionLabel.Opacity = v, 1, 0, Easing.Linear);
-            var descriptionAnimation2 = new Animation(v => DescriptionLabel.TranslationY = v, DescriptionLabel.TranslationY, -100, Easing.Linear);
+            var descriptionAnimation2 = new Animation(v => DescriptionLabel.TranslationY = v, DescriptionLabel.TranslationY, 50, Easing.Linear);
 
             //Info Container
-            var containerAnimation1 = new Animation(v => InfoContainer.TranslationY = v, InfoContainer.TranslationY, -130, Easing.Linear);
+            var containerAnimation1 = new Animation(v => InfoContainer.TranslationY = v, InfoContainer.TranslationY, -70, Easing.Linear);
 
             // Buttons
             var buttonAnimation1 = new Animation(v => PlayButton.Opacity = v, 1, 0.6, Easing.Linear);
@@ -112,8 +111,7 @@ namespace Xamflix.App.Forms
 
             parentAnimation.Add(0, 1, imageAnimation1);
             parentAnimation.Add(0, 1, imageAnimation2);
-            parentAnimation.Add(0, 1, imageAnimation3);
-
+          
             parentAnimation.Add(0, 0.7, titleLabelAnimation1);
             parentAnimation.Add(0.2, 1, titleLabelAnimation2);
 
@@ -126,10 +124,9 @@ namespace Xamflix.App.Forms
             parentAnimation.Add(0, 1, buttonAnimation2);
 
             parentAnimation.Commit(this, "ScaleDownAnimation", 16, 1000, null, (v, c) => HideLables());
-
         }
 
-        private void HideLables() 
+        private void HideLables()
         {
             //TitleLabel.IsVisible = false;
             //DescriptionLabel.IsVisible = false;
