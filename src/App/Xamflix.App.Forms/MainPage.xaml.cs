@@ -14,9 +14,10 @@ namespace Xamflix.App.Forms
 {
     public partial class MainPage : ContentPage
     {
+        private bool _colapsed = false;
+
         public MainPage()
         {
-            
             InitializeComponent();
             CrossMediaManager.Current.BufferedChanged += CurrentOnBufferedChanged;
             CrossMediaManager.Current.MediaItemChanged += CurrentOnMediaItemChanged;
@@ -33,15 +34,14 @@ namespace Xamflix.App.Forms
                 case MediaPlayerState.Playing:
                 {
                     await PosterImage.FadeTo(0);
-                    await ScaleDownTitleImageAsync();
-                    break;
+                        await Animate();
+                        break;
                 }
                 default:
-
-                {
-                    await PosterImage.FadeTo(1);
-                    break;
-                }
+               {
+                        await PosterImage.FadeTo(1);
+                        break;
+               }
             }
         }
 
@@ -75,61 +75,109 @@ namespace Xamflix.App.Forms
         {
             base.OnAppearing();
             await Task.Delay(1000);
-            var media = new MediaItem(
-                                      Uri.EscapeUriString(
-                                                          @"https://xamflixdevgwcmedia-gewc1.streaming.media.azure.net/9f4ee191-59ff-48bf-bf53-2bfbec396d8b/The Midnight Sky  Final Trailer .ism/manifest(format=m3u8-aapl)"))
-                        {
-                            MediaType = MediaType.Hls
-                        };
-            TrailerVideoView.Source = media;
-            Trace.WriteLine($"Setting media item  {JsonSerializer.Serialize(media)}");
+            Play();
         }
 
         private async Task ScaleDownTitleImageAsync()
         {
-            await Task.Delay(1000);
+            await Task.Delay(7000);
             var parentAnimation = new Animation();
 
             // Title Image
             var imageAnimation1 = new Animation(v => TitleImage.Scale = v, 1, 0.7, Easing.CubicOut);
-            var imageAnimation2 = new Animation(v => TitleImage.Opacity = v, 1, 0.6, Easing.Linear);
+            var imageAnimation2 = new Animation(v => TitleImage.Opacity = v, 1, 0.5, Easing.Linear);
             
             // Title Label
             var titleLabelAnimation1 = new Animation(v => TitleLabel.Opacity = v, 1, 0, Easing.Linear);
-            var titleLabelAnimation2 = new Animation(v => TitleLabel.TranslationY = v, TitleLabel.TranslationY, 50, Easing.Linear);
-
+            var titleLabelAnimation2 = new Animation(v => TitleLabel.TranslationY = v, TitleLabel.TranslationY, 60, Easing.Linear);
+            
             // Title Description
             var descriptionAnimation1 = new Animation(v => DescriptionLabel.Opacity = v, 1, 0, Easing.Linear);
-            var descriptionAnimation2 = new Animation(v => DescriptionLabel.TranslationY = v, DescriptionLabel.TranslationY, 50, Easing.Linear);
-
-            //Info Container
-            var containerAnimation1 = new Animation(v => InfoContainer.TranslationY = v, InfoContainer.TranslationY, -70, Easing.Linear);
-
+            var descriptionAnimation2 = new Animation(v => DescriptionLabel.TranslationY = v, DescriptionLabel.TranslationY, 60, Easing.Linear);
+            
             // Buttons
             var buttonAnimation1 = new Animation(v => PlayButton.Opacity = v, 1, 0.6, Easing.Linear);
             var buttonAnimation2 = new Animation(v => MoreButton.Opacity = v, 1, 0.6, Easing.Linear);
 
-            parentAnimation.Add(0, 1, imageAnimation1);
+            parentAnimation.Add(0.1, 1, imageAnimation1);
             parentAnimation.Add(0, 1, imageAnimation2);
           
-            parentAnimation.Add(0, 0.7, titleLabelAnimation1);
-            parentAnimation.Add(0.2, 1, titleLabelAnimation2);
-
-            parentAnimation.Add(0, 0.7, descriptionAnimation1);
-            parentAnimation.Add(0.2, 1, descriptionAnimation2);
-
-            parentAnimation.Add(0.2, 1, containerAnimation1);
+            parentAnimation.Add(0, 0.3, titleLabelAnimation1);
+            parentAnimation.Add(0, 0.5, titleLabelAnimation2);
+            
+            parentAnimation.Add(0, 0.3, descriptionAnimation1);
+            parentAnimation.Add(0, 0.5, descriptionAnimation2);
+            
 
             parentAnimation.Add(0, 1, buttonAnimation1);
             parentAnimation.Add(0, 1, buttonAnimation2);
 
-            parentAnimation.Commit(this, "ScaleDownAnimation", 16, 1000, null, (v, c) => HideLables());
+            parentAnimation.Commit(this, "ScaleDownAnimation", 16, 1000, null, null);
+            _colapsed = true;
         }
 
-        private void HideLables()
+        private async Task ScaleOutTitleImageAsync()
         {
-            //TitleLabel.IsVisible = false;
-            //DescriptionLabel.IsVisible = false;
+            await Task.Delay(10);
+            var parentAnimation = new Animation();
+
+            // Title Image
+            var imageAnimation1 = new Animation(v => TitleImage.Scale = v, 0.7, 1, Easing.CubicOut);
+            var imageAnimation2 = new Animation(v => TitleImage.Opacity = v, 0.5, 1, Easing.Linear);
+
+            // Title Label
+            var titleLabelAnimation1 = new Animation(v => TitleLabel.Opacity = v, 0, 1, Easing.Linear);
+            var titleLabelAnimation2 = new Animation(v => TitleLabel.TranslationY = v, TitleLabel.TranslationY, -5, Easing.Linear);
+
+            // Title Description
+            var descriptionAnimation1 = new Animation(v => DescriptionLabel.Opacity = v, 0, 1, Easing.Linear);
+            var descriptionAnimation2 = new Animation(v => DescriptionLabel.TranslationY = v, DescriptionLabel.TranslationY, -5, Easing.Linear);
+
+            // Buttons
+            var buttonAnimation1 = new Animation(v => PlayButton.Opacity = v, 0.6, 1, Easing.Linear);
+            var buttonAnimation2 = new Animation(v => MoreButton.Opacity = v, 0.6, 1, Easing.Linear);
+
+            parentAnimation.Add(0.1, 1, imageAnimation1);
+            parentAnimation.Add(0, 1, imageAnimation2);
+
+            parentAnimation.Add(0, 0.3, titleLabelAnimation1);
+            parentAnimation.Add(0, 0.5, titleLabelAnimation2);
+
+            parentAnimation.Add(0, 0.3, descriptionAnimation1);
+            parentAnimation.Add(0, 0.5, descriptionAnimation2);
+
+            parentAnimation.Add(0, 1, buttonAnimation1);
+            parentAnimation.Add(0, 1, buttonAnimation2);
+
+            parentAnimation.Commit(this, "ScaleOutAnimation", 16, 1000, null,null);
+            _colapsed = false;
+        }
+
+        private async Task Animate() 
+        {
+            if (_colapsed)
+            {
+                await ScaleOutTitleImageAsync();
+            }
+            await ScaleDownTitleImageAsync();
+        }
+
+        private async void Button_Clicked(object sender, EventArgs e)
+        {
+            if (_colapsed)
+            {
+                await ScaleOutTitleImageAsync();
+            }
+            Play();
+        }
+        private void Play() 
+        {
+            var media = new MediaItem(Uri.EscapeUriString(@"https://xamflixdevgwcmedia-gewc1.streaming.media.azure.net/9f4ee191-59ff-48bf-bf53-2bfbec396d8b/The Midnight Sky  Final Trailer .ism/manifest(format=m3u8-aapl)"))
+            {
+                MediaType = MediaType.Hls
+            };
+            TrailerVideoView.Source = media;
+            Trace.WriteLine($"Setting media item  {JsonSerializer.Serialize(media)}");
         }
     }
 }

@@ -51,20 +51,20 @@
             x:Name="TitleImage"
             Grid.Row="1"
             Grid.Column="0"
-            Margin="20,120,0,0"
+            Margin="20,100,0,10"
             AnchorX="0"
-            AnchorY="1"
+            AnchorY="2.5"
+            HeightRequest="247"
             HorizontalOptions="FillAndExpand"
-            HeightRequest="260"
-            WidthRequest="650"
-            Source="{markup:ImageResource 'the_midnight_sky_title.png'}" />
+            Source="{markup:ImageResource 'the_midnight_sky_title.png'}"
+            WidthRequest="617" />
         <Label
             x:Name="TitleLabel"
             Grid.Row="2"
             Grid.Column="0"
             Margin="20,0,0,10"
-            FontAttributes="Bold"
-            FontSize="20"
+            FontFamily="RobotoBold"
+            FontSize="22"
             HorizontalTextAlignment="Start"
             Text="Watch movie 4 Now"
             TextColor="White" />
@@ -73,7 +73,8 @@
             Grid.Row="3"
             Grid.Column="0"
             Margin="20,0,0,10"
-            FontSize="15"
+            FontFamily="RobotoLight"
+            FontSize="19"
             LineBreakMode="WordWrap"
             Text="In the aftermath of a global catastrophe,&#10;a lone scientist in the Arctic races to contact&#10;a crew of astronauts with a warning&#10;not to return to Earth." />
         <StackLayout
@@ -87,23 +88,36 @@
                 x:Name="PlayButton"
                 BackgroundColor="#FFFFFF"
                 CornerRadius="5"
-                FontAttributes="Bold"
+                FontFamily="RobotoBold"
+                FontSize="17"
                 HeightRequest="44"
                 HorizontalOptions="Start"
                 Text="Play"
                 TextColor="Black"
-                WidthRequest="120" />
+                WidthRequest="130" />
             <Button
                 x:Name="MoreButton"
                 BackgroundColor="#545457"
                 CornerRadius="5"
-                FontAttributes="Bold"
+                FontFamily="RobotoBold"
+                FontSize="17"
                 HeightRequest="44"
                 HorizontalOptions="Start"
                 Text="More Info"
                 TextColor="#FFFFFF"
-                WidthRequest="150" />
+                WidthRequest="160" />
         </StackLayout>
+
+        <Button
+            Grid.Row="4"
+            Grid.Column="2"
+            Margin="0,0,100,0"
+            BackgroundColor="#545457"
+            Clicked="Button_Clicked"
+            HeightRequest="44"
+            Opacity="0.5"
+            Text="Repeat"
+            TextColor="White" />
 
     </Grid>
 
