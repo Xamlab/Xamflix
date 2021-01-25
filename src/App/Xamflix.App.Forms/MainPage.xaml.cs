@@ -104,11 +104,11 @@ namespace Xamflix.App.Forms
             var descriptionAnimation2 = new Animation(v => DescriptionLabel.TranslationY = v, DescriptionLabel.TranslationY, -100, Easing.Linear);
 
             //Info Container
-            var ContainerAnimation1 = new Animation(v => InfoContainer.TranslationY = v, InfoContainer.TranslationY, -130, Easing.Linear);
+            var containerAnimation1 = new Animation(v => InfoContainer.TranslationY = v, InfoContainer.TranslationY, -130, Easing.Linear);
 
             // Buttons
-            var buttonAnmiation1 = new Animation(v => PlayButton.Opacity = v, 1, 0.6, Easing.Linear);
-            var buttonAnmiation2 = new Animation(v => MoreButton.Opacity = v, 1, 0.6, Easing.Linear);
+            var buttonAnimation1 = new Animation(v => PlayButton.Opacity = v, 1, 0.6, Easing.Linear);
+            var buttonAnimation2 = new Animation(v => MoreButton.Opacity = v, 1, 0.6, Easing.Linear);
 
             parentAnimation.Add(0, 1, imageAnimation1);
             parentAnimation.Add(0, 1, imageAnimation2);
@@ -120,10 +120,10 @@ namespace Xamflix.App.Forms
             parentAnimation.Add(0, 0.7, descriptionAnimation1);
             parentAnimation.Add(0.2, 1, descriptionAnimation2);
 
-            parentAnimation.Add(0.2, 1, ContainerAnimation1);
+            parentAnimation.Add(0.2, 1, containerAnimation1);
 
-            parentAnimation.Add(0, 1, buttonAnmiation1);
-            parentAnimation.Add(0, 1, buttonAnmiation2);
+            parentAnimation.Add(0, 1, buttonAnimation1);
+            parentAnimation.Add(0, 1, buttonAnimation2);
 
             parentAnimation.Commit(this, "ScaleDownAnimation", 16, 1000, null, (v, c) => HideLables());
 
