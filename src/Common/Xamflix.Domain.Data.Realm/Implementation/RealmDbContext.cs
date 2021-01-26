@@ -98,7 +98,7 @@ namespace Xamflix.Domain.Data.Realm.Implementation
 
         private async Task<Realms.Realm> GetRealmAsync()
         {
-            Realms.Realm realm = await _domainServiceLocator.Resolve<IRealmFactory>().GetDefaultRealmAsync();
+            Realms.Realm realm = await _domainServiceLocator.Resolve<IRealmFactory>().GetDefaultSyncedRealmAsync();
             if(!_activeRealms.Contains(realm))
             {
                 _activeRealms.Add(realm);

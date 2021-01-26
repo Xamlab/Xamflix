@@ -12,9 +12,14 @@ namespace Xamflix.Domain.Data.Realm.Implementation
             _realmConfigurationFactory = realmConfigurationFactory;
         }
 
-        public async Task<Realms.Realm> GetDefaultRealmAsync()
+        public async Task<Realms.Realm> GetDefaultSyncedRealmAsync()
         {
-            return _realm ??= await Realms.Realm.GetInstanceAsync(await _realmConfigurationFactory.GetDefaultConfigurationAsync());
+            return _realm ??= await Realms.Realm.GetInstanceAsync(await _realmConfigurationFactory.GetDefaultSyncedConfigurationAsync());
+        }
+
+        public async Task<Realms.Realm> GetDefaultLocalRealmAsync()
+        {
+            return _realm ??= await Realms.Realm.GetInstanceAsync(await _realmConfigurationFactory.GetDefaultLocalConfigurationAsync());
         }
     }
 }

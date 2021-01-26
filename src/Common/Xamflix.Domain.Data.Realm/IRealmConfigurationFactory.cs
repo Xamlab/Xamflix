@@ -5,6 +5,7 @@ namespace Xamflix.Domain.Data.Realm
 {
     public interface IRealmConfigurationFactory
     {
-        Task<RealmConfigurationBase> GetDefaultConfigurationAsync();
+        Task<RealmConfigurationBase> GetDefaultSyncedConfigurationAsync();
+        Task<RealmConfigurationBase> GetDefaultLocalConfigurationAsync();
     }
 }

@@ -20,13 +20,19 @@ namespace Xamflix.Domain.Data.Realm.Implementation
             _migrationFactory = migrationFactory;
         }
 
-        public async Task<RealmConfigurationBase> GetDefaultConfigurationAsync()
+        public async Task<RealmConfigurationBase> GetDefaultSyncedConfigurationAsync()
         {
             var app = App.Create(_configuration.CloudAppId);
             var user = await app.LogInAsync(Credentials.ApiKey(_configuration.ApiKey));
             var localDbPath = _systemPathService.GetLocalPath(_configuration.DbFileName);
             var configuration = new SyncConfiguration("DASHBOARD", user, localDbPath);
             return configuration;
+        }
+
+        public Task<RealmConfigurationBase> GetDefaultLocalConfigurationAsync()
+        {
+            var localDbPath = _systemPathService.GetLocalPath(_configuration.DbFileName);
+            return Task.FromResult(GetConfigurationWithPath(localDbPath));
         }
 
         private RealmConfigurationBase GetConfigurationWithPath(string realmDbPath)
