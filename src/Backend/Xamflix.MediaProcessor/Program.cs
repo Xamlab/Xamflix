@@ -24,6 +24,7 @@ namespace Xamflix.MediaProcessor
             var configBuilder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", true, true)
+                .AddUserSecrets<Program>()
                 .AddEnvironmentVariables()
                 .Build();
             var config = configBuilder.GetSection("MediaService").Get<MediaServiceConfiguration>();
