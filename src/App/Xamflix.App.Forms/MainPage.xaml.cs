@@ -74,7 +74,7 @@ namespace Xamflix.App.Forms
             await Task.Delay(2000);
             var media = new MediaItem(
                 Uri.EscapeUriString(
-                    @"https://xamflixdevgwcmedia-gewc1.streaming.media.azure.net/9f4ee191-59ff-48bf-bf53-2bfbec396d8b/The Midnight Sky  Final Trailer .ism/manifest(format=m3u8-aapl)"))
+                    @"https://xamflixdevgwcmedia-gewc1.streaming.media.azure.net/c2c86ac8-5dbc-479d-9bad-4bcac71901d7/Pride%20&%20Prejudice.ism/manifest(format=m3u8-aapl)"))
             {
                 MediaType = MediaType.Hls
             };

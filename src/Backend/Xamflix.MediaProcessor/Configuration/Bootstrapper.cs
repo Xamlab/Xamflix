@@ -30,6 +30,12 @@ namespace Xamflix.MediaProcessor.Configuration
             
             var mediaServiceConfiguration = configuration.GetSection("MediaService").Get<MediaServiceConfiguration>();
             services.AddSingleton(mediaServiceConfiguration);
+
+            var blobConfiguration = configuration.GetSection("Blob").Get<BlobStorageConfiguration>();
+            services.AddSingleton(blobConfiguration);
+            
+            var importConfiguration = configuration.GetSection("Import").Get<ImportConfiguration>();
+            services.AddSingleton(importConfiguration);
             
             return services;
         }

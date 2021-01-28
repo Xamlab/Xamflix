@@ -5,6 +5,8 @@ namespace Xamflix.MediaProcessor.Services
 {
     public interface IMediaService
     {
-        Task<IEnumerable<string>> EncodeVideoForStreaming(string inputMp4FileName, string downloadResultAssetsOutputPath = null);
+        Task<IEnumerable<string>> EncodeVideoForStreaming(string inputMp4FileName, 
+                                                          string uniqueMediaName, 
+                                                          string downloadResultAssetsOutputPath = null);
     }
 }

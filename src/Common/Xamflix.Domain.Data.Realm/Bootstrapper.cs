@@ -7,11 +7,11 @@ namespace Xamflix.Domain.Data.Realm
     {
         public static IServiceCollection AddRealm(this IServiceCollection services)
         {
-            services.AddTransient<IRealmConfigurationFactory, RealmConfigurationFactory>();
+            services.AddSingleton<IRealmConfigurationFactory, RealmConfigurationFactory>();
             services.AddTransient<IRealmMigrationFactory, RealmMigrationFactory>();
             services.AddTransient<IDomainServiceLocator, DomainServiceLocator>();
             services.AddTransient<IAppDbContext, RealmDbContext>();
-            services.AddSingleton<IRealmFactory, RealmFactory>();
+            services.AddTransient<IRealmFactory, RealmFactory>();
             return services;
         }
     }
