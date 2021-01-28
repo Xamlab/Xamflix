@@ -12,7 +12,7 @@ using PositionChangedEventArgs = MediaManager.Playback.PositionChangedEventArgs;
 
 namespace Xamflix.App.Forms
 {
-    public partial class MainPage : ContentPage
+    public partial class MainPage
     {
         private bool _colapsed = false;
 
@@ -140,11 +140,11 @@ namespace Xamflix.App.Forms
             parentAnimation.Add(0.1, 1, imageAnimation1);
             parentAnimation.Add(0, 1, imageAnimation2);
 
-            parentAnimation.Add(0, 0.3, titleLabelAnimation1);
-            parentAnimation.Add(0, 0.5, titleLabelAnimation2);
+            parentAnimation.Add(0.2, 1, titleLabelAnimation1);
+            parentAnimation.Add(0.2, 0.7, titleLabelAnimation2);
 
-            parentAnimation.Add(0, 0.3, descriptionAnimation1);
-            parentAnimation.Add(0, 0.5, descriptionAnimation2);
+            parentAnimation.Add(0.2, 1, descriptionAnimation1);
+            parentAnimation.Add(0.2, 0.7, descriptionAnimation2);
 
             parentAnimation.Add(0, 1, buttonAnimation1);
             parentAnimation.Add(0, 1, buttonAnimation2);
@@ -164,11 +164,12 @@ namespace Xamflix.App.Forms
 
         private async void Button_Clicked(object sender, EventArgs e)
         {
-            if (_colapsed)
-            {
-                await ScaleOutTitleImageAsync();
-            }
-            Play();
+            //if (_colapsed)
+            //{
+            //    await ScaleOutTitleImageAsync();
+            //}
+            //Play();
+            await Animate();
         }
         private void Play() 
         {

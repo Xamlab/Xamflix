@@ -5,7 +5,8 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:forms="clr-namespace:MediaManager.Forms;assembly=MediaManager.Forms"
-    xmlns:markup="clr-namespace:Xamflix.App.Forms.MarkupExtensions;assembly=Xamflix.App.Forms">
+    xmlns:markup="clr-namespace:Xamflix.App.Forms.MarkupExtensions;assembly=Xamflix.App.Forms"
+    xmlns:effects="clr-namespace:Xamflix.App.Forms.Effects;assembly=Xamflix.App.Forms">
 
     <Grid
         x:Name="ParentGrid"
@@ -51,7 +52,7 @@
             x:Name="TitleImage"
             Grid.Row="1"
             Grid.Column="0"
-            Margin="20,100,0,10"
+            Margin="20,100,0,20"
             AnchorX="0"
             AnchorY="2.5"
             HeightRequest="247"
@@ -64,19 +65,36 @@
             Grid.Column="0"
             Margin="20,0,0,10"
             FontFamily="RobotoBold"
-            FontSize="22"
+            FontSize="Title"
             HorizontalTextAlignment="Start"
             Text="Watch movie 4 Now"
-            TextColor="White" />
+            TextColor="White">
+            <Label.Effects>
+                <effects:ShadowEffect
+                    Radius="5"
+                    DistanceX="2"
+                    DistanceY="2"
+                    Color="Black" />
+            </Label.Effects>
+        </Label>
         <Label
             x:Name="DescriptionLabel"
             Grid.Row="3"
             Grid.Column="0"
             Margin="20,0,0,10"
-            FontFamily="RobotoLight"
-            FontSize="19"
+            FontFamily="RobotoNormal"
+            FontSize="Subtitle"
+            TextColor="White"
             LineBreakMode="WordWrap"
-            Text="In the aftermath of a global catastrophe,&#10;a lone scientist in the Arctic races to contact&#10;a crew of astronauts with a warning&#10;not to return to Earth." />
+            Text="In the aftermath of a global catastrophe,&#10;a lone scientist in the Arctic races to contact&#10;a crew of astronauts with a warning&#10;not to return to Earth.">
+            <Label.Effects>
+                <effects:ShadowEffect
+                    Radius="5"
+                    DistanceX="2"
+                    DistanceY="2"
+                    Color="Black" />
+            </Label.Effects>
+        </Label>
         <StackLayout
             x:Name="InfoContainer"
             Grid.Row="4"
