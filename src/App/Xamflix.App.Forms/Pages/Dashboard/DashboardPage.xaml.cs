@@ -24,5 +24,14 @@ namespace Xamflix.App.Forms.Pages.Dashboard
             await Task.Delay(1000);
             BillboardView.Play();
         }
+
+        protected override void OnSizeAllocated(double width, double height)
+        {
+            base.OnSizeAllocated(width, height);
+            if (height >= 0)
+            {
+                BillboardView.HeightRequest = 0.8 * height;
+            }
+        }
     }
 }

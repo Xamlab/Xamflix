@@ -29,7 +29,8 @@
                     <dashboard:BillboardView
                         x:Name="BillboardView"
                         IsVisible="{Binding Dashboard, Converter={StaticResource VisibilityConverter}}"
-                        HorizontalOptions="FillAndExpand" />
+                        HorizontalOptions="FillAndExpand" 
+                        VerticalOptions="Start"/>
                 </CollectionView.Header>
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:Category">

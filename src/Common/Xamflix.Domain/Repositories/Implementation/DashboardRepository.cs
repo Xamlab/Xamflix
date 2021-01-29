@@ -17,9 +17,20 @@ namespace Xamflix.Domain.Repositories.Implementation
 
         public async Task<Dashboard?> GetDefaultDashboardAsync(CancellationToken token = default)
         {
-            await _dbContext.SynchronizeAsync(token);
-            var dashboard = (await _dbContext.GetItemsAsync<Dashboard>())
-                .FirstOrDefault(d => d.Name == "Dashboard");
+            Dashboard? dashboard = null;
+
+            async Task FetchDashboardAsync()
+            {
+                dashboard = (await _dbContext.GetItemsAsync<Dashboard>())
+                    .FirstOrDefault(d => d.Name == "Dashboard");
+            }
+
+            if (dashboard == null)
+            {
+                await _dbContext.SynchronizeAsync(token);
+                await FetchDashboardAsync();
+            }
+
             return dashboard;
         }
     }
