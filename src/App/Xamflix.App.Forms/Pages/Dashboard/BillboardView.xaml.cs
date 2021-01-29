@@ -4,14 +4,12 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using MediaManager;
 using MediaManager.Library;
-using MediaManager.Media;
 using MediaManager.Playback;
 using MediaManager.Player;
 using Xamarin.Forms;
 using Xamflix.App.Forms.MarkupExtensions;
 using Xamflix.Core.AsyncVoid;
 using Xamflix.ViewModels.Dashboard;
-using PositionChangedEventArgs = MediaManager.Playback.PositionChangedEventArgs;
 
 namespace Xamflix.App.Forms.Pages.Dashboard
 {
@@ -27,19 +25,18 @@ namespace Xamflix.App.Forms.Pages.Dashboard
 
         public void Play()
         {
-            if (BindingContext is IDashboardViewModel dashboardViewModel)
+            if (!(BindingContext is IDashboardViewModel dashboardViewModel)) return;
+
+            var billboardMovieStreamingUrl = dashboardViewModel.Dashboard?.BillboardMovie?.StreamingUrl;
+            if (billboardMovieStreamingUrl == null) return;
+
+            var media = new MediaItem(billboardMovieStreamingUrl)
             {
-                var billboardMovieStreamingUrl = dashboardViewModel.Dashboard?.BillboardMovie?.StreamingUrl;
-                if (billboardMovieStreamingUrl != null)
-                {
-                    var media = new MediaItem(billboardMovieStreamingUrl)
-                    {
-                        MediaType = MediaType.Hls
-                    };
-                    TrailerVideoView.Source = media;
-                    Trace.WriteLine($"Setting media item  {JsonSerializer.Serialize(media)}");
-                }
-            }
+                MediaType = MediaType.Hls
+            };
+
+            TrailerVideoView.Source = media;
+            Trace.WriteLine($"Setting media item  {JsonSerializer.Serialize(media)}");
         }
 
         [AsyncVoidCheckExemption("Bridging UI lifecycle with async code")]
@@ -74,33 +71,32 @@ namespace Xamflix.App.Forms.Pages.Dashboard
             // Title Image
             var titleImageScaleDown = new Animation(v => TitleImage.Scale = v, 1, 0.7, Easing.CubicOut);
             var titleImageFadeOut = new Animation(v => TitleImage.Opacity = v, 1, 0.5, Easing.Linear);
-            var titleImageMoveDown = new Animation(v => TitleImage.TranslationY = v, TitleImage.TranslationY, TitleLabel.Height, Easing.Linear);
 
             // Title Label
-            var titleLabelAnimation1 = new Animation(v => TitleLabel.Opacity = v, 1, 0, Easing.Linear);
-            var titleLabelAnimation2 = new Animation(v => TitleLabel.TranslationY = v, TitleLabel.TranslationY, 60, Easing.Linear);
+            var titleLabelFadeOut = new Animation(v => TitleLabel.Opacity = v, 1, 0, Easing.Linear);
+            var titleLabelMoveDown = new Animation(v => TitleLabel.TranslationY = v, TitleLabel.TranslationY, 60,
+                Easing.Linear);
 
             // Title Description
-            var descriptionAnimation1 = new Animation(v => DescriptionLabel.Opacity = v, 1, 0, Easing.Linear);
-            var descriptionAnimation2 = new Animation(v => DescriptionLabel.TranslationY = v,
+            var descriptionFadeOut = new Animation(v => DescriptionLabel.Opacity = v, 1, 0, Easing.Linear);
+            var descriptionMoveDown = new Animation(v => DescriptionLabel.TranslationY = v,
                 DescriptionLabel.TranslationY, 60, Easing.Linear);
 
             // Buttons
-            var buttonAnimation1 = new Animation(v => PlayButton.Opacity = v, 1, 0.6, Easing.Linear);
-            var buttonAnimation2 = new Animation(v => MoreButton.Opacity = v, 1, 0.6, Easing.Linear);
+            var playButtonFadeOut = new Animation(v => PlayButton.Opacity = v, 1, 0.6, Easing.Linear);
+            var moreButtonFadeOut = new Animation(v => MoreButton.Opacity = v, 1, 0.6, Easing.Linear);
 
             parentAnimation.Add(0.1, 1, titleImageScaleDown);
             parentAnimation.Add(0, 1, titleImageFadeOut);
-            //parentAnimation.Add(0, 1, titleImageMoveDown);
 
-            parentAnimation.Add(0, 0.3, titleLabelAnimation1);
-            parentAnimation.Add(0, 0.5, titleLabelAnimation2);
+            parentAnimation.Add(0, 0.3, titleLabelFadeOut);
+            parentAnimation.Add(0, 0.5, titleLabelMoveDown);
 
-            parentAnimation.Add(0, 0.3, descriptionAnimation1);
-            parentAnimation.Add(0, 0.5, descriptionAnimation2);
+            parentAnimation.Add(0, 0.3, descriptionFadeOut);
+            parentAnimation.Add(0, 0.5, descriptionMoveDown);
 
-            parentAnimation.Add(0, 1, buttonAnimation1);
-            parentAnimation.Add(0, 1, buttonAnimation2);
+            parentAnimation.Add(0, 1, playButtonFadeOut);
+            parentAnimation.Add(0, 1, moreButtonFadeOut);
 
             parentAnimation.Commit(this, "ScaleDownAnimation", 16, 1000);
             _collapsed = true;
@@ -112,34 +108,34 @@ namespace Xamflix.App.Forms.Pages.Dashboard
             var parentAnimation = new Animation();
 
             // Title Image
-            var imageAnimation1 = new Animation(v => TitleImage.Scale = v, 0.7, 1, Easing.CubicOut);
-            var imageAnimation2 = new Animation(v => TitleImage.Opacity = v, 0.5, 1, Easing.Linear);
+            var titleImageScaleUp = new Animation(v => TitleImage.Scale = v, 0.7, 1, Easing.CubicOut);
+            var titleImageFadeIn = new Animation(v => TitleImage.Opacity = v, 0.5, 1, Easing.Linear);
 
             // Title Label
-            var titleLabelAnimation1 = new Animation(v => TitleLabel.Opacity = v, 0, 1, Easing.Linear);
-            var titleLabelAnimation2 = new Animation(v => TitleLabel.TranslationY = v, TitleLabel.TranslationY, -5,
+            var titleLabelFadeIn = new Animation(v => TitleLabel.Opacity = v, 0, 1, Easing.Linear);
+            var titleLabelMoveUp = new Animation(v => TitleLabel.TranslationY = v, TitleLabel.TranslationY, -5,
                 Easing.Linear);
 
             // Title Description
-            var descriptionAnimation1 = new Animation(v => DescriptionLabel.Opacity = v, 0, 1, Easing.Linear);
-            var descriptionAnimation2 = new Animation(v => DescriptionLabel.TranslationY = v,
+            var descriptionFadeIn = new Animation(v => DescriptionLabel.Opacity = v, 0, 1, Easing.Linear);
+            var descriptionMoveUp = new Animation(v => DescriptionLabel.TranslationY = v,
                 DescriptionLabel.TranslationY, -5, Easing.Linear);
 
             // Buttons
-            var buttonAnimation1 = new Animation(v => PlayButton.Opacity = v, 0.6, 1, Easing.Linear);
-            var buttonAnimation2 = new Animation(v => MoreButton.Opacity = v, 0.6, 1, Easing.Linear);
+            var playButtonFadeIn = new Animation(v => PlayButton.Opacity = v, 0.6, 1, Easing.Linear);
+            var moreButtonFadeIn = new Animation(v => MoreButton.Opacity = v, 0.6, 1, Easing.Linear);
 
-            parentAnimation.Add(0.1, 1, imageAnimation1);
-            parentAnimation.Add(0, 1, imageAnimation2);
+            parentAnimation.Add(0.1, 1, titleImageScaleUp);
+            parentAnimation.Add(0, 1, titleImageFadeIn);
 
-            parentAnimation.Add(0, 0.3, titleLabelAnimation1);
-            parentAnimation.Add(0, 0.5, titleLabelAnimation2);
+            parentAnimation.Add(0, 0.3, titleLabelFadeIn);
+            parentAnimation.Add(0, 0.5, titleLabelMoveUp);
 
-            parentAnimation.Add(0, 0.3, descriptionAnimation1);
-            parentAnimation.Add(0, 0.5, descriptionAnimation2);
+            parentAnimation.Add(0, 0.3, descriptionFadeIn);
+            parentAnimation.Add(0, 0.5, descriptionMoveUp);
 
-            parentAnimation.Add(0, 1, buttonAnimation1);
-            parentAnimation.Add(0, 1, buttonAnimation2);
+            parentAnimation.Add(0, 1, playButtonFadeIn);
+            parentAnimation.Add(0, 1, moreButtonFadeIn);
 
             parentAnimation.Commit(this, "ScaleOutAnimation", 16, 1000);
             _collapsed = false;
@@ -147,10 +143,7 @@ namespace Xamflix.App.Forms.Pages.Dashboard
 
         private async Task Animate()
         {
-            if (_collapsed)
-            {
-                await ScaleOutTitleImageAsync();
-            }
+            if (_collapsed) await ScaleOutTitleImageAsync();
 
             await ScaleDownTitleImageAsync();
         }
