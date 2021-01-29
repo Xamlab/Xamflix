@@ -92,6 +92,24 @@ namespace Xamflix.MediaProcessor.GenerateData
                                             (imageUrl, m) => m.TallThumbnailImageUrl = imageUrl,
                                             context));
             }
+            
+            if(string.IsNullOrWhiteSpace(movie.BillboardPosterImageUrl) && !string.IsNullOrWhiteSpace(movieImport.BillboardPosterImageFileName))
+            {
+                uploadTasks.Add(UploadImage(movie.Id,
+                                            "BillboardPosters",
+                                            movieImport.BillboardPosterImageFileName,
+                                            (imageUrl, m) => m.BillboardPosterImageUrl = imageUrl,
+                                            context));
+            }
+            
+            if(string.IsNullOrWhiteSpace(movie.BillboardPosterTitleImageUrl) && !string.IsNullOrWhiteSpace(movieImport.BillboardPosterTitleImageFileName))
+            {
+                uploadTasks.Add(UploadImage(movie.Id,
+                                            "BillboardPosterTitles",
+                                            movieImport.BillboardPosterTitleImageFileName,
+                                            (imageUrl, m) => m.BillboardPosterTitleImageUrl = imageUrl,
+                                            context));
+            }
 
             return uploadTasks;
         }

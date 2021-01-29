@@ -16,6 +16,7 @@ namespace Xamflix.MediaProcessor.GenerateData
             services.AddTransient<GenerateMoviesCommand>();
             services.AddTransient<UploadMovieImagesCommand>();
             services.AddTransient<UploadMovieTrailersCommand>();
+            services.AddTransient<BuildBillboardCommand>();
             return services;
         }
     }
