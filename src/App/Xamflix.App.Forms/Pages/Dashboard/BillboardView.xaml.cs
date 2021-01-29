@@ -8,6 +8,7 @@ using MediaManager.Media;
 using MediaManager.Playback;
 using MediaManager.Player;
 using Xamarin.Forms;
+using Xamflix.App.Forms.MarkupExtensions;
 using Xamflix.Core.AsyncVoid;
 using Xamflix.ViewModels.Dashboard;
 using PositionChangedEventArgs = MediaManager.Playback.PositionChangedEventArgs;
@@ -52,12 +53,12 @@ namespace Xamflix.App.Forms.Pages.Dashboard
                 case MediaPlayerState.Playing:
                 {
                     await PosterImage.FadeTo(0);
-                    await Animate();
+                    //await Animate();
                     break;
                 }
                 case MediaPlayerState.Stopped:
                 {
-                    await ScaleOutTitleImageAsync();
+                    //await ScaleOutTitleImageAsync();
                     break;
                 }
                 default:
@@ -170,12 +171,12 @@ namespace Xamflix.App.Forms.Pages.Dashboard
 
         private async Task Animate()
         {
-            if(_collapsed)
-            {
-                await ScaleOutTitleImageAsync();
-            }
+            //if(_collapsed)
+            //{
+            //    await ScaleOutTitleImageAsync();
+            //}
 
-            await ScaleDownTitleImageAsync();
+            //await ScaleDownTitleImageAsync();
         }
 
         [AsyncVoidCheckExemption("Bridging UI lifecycle with async code")]
@@ -194,12 +195,12 @@ namespace Xamflix.App.Forms.Pages.Dashboard
             if(CrossMediaManager.Current.Volume.Muted)
             {
                 CrossMediaManager.Current.Volume.Muted = false;
-                MuteButton.ImageSource = "unMute.png";
+                MuteButton.ImageSource = "unMute".GetImageSource();
             }
             else
             {
                 CrossMediaManager.Current.Volume.Muted = true;
-                MuteButton.ImageSource = "mute.png";
+                MuteButton.ImageSource = "mute".GetImageSource();
             }
         }
     }

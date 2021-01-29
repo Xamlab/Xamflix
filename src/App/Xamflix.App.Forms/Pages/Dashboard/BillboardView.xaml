@@ -6,15 +6,18 @@
     xmlns:forms="clr-namespace:MediaManager.Forms;assembly=MediaManager.Forms"
     xmlns:effects="clr-namespace:Xamflix.App.Forms.Effects;assembly=Xamflix.App.Forms"
     xmlns:dashboard="clr-namespace:Xamflix.ViewModels.Dashboard;assembly=Xamflix.ViewModels"
+    xmlns:markupExtensions="clr-namespace:Xamflix.App.Forms.MarkupExtensions;assembly=Xamflix.App.Forms"
     x:Name="ParentGrid"
     x:DataType="dashboard:IDashboardViewModel"
     ColumnSpacing="10"
-    RowSpacing="5">
+    RowSpacing="10">
     <Grid.RowDefinitions>
-        <RowDefinition Height="Auto" />
+        <RowDefinition Height="*" />
+        <RowDefinition Height="247" />
         <RowDefinition Height="Auto" />
         <RowDefinition Height="Auto" />
         <RowDefinition Height="50" />
+        <RowDefinition Height="*" />
     </Grid.RowDefinitions>
     <Grid.ColumnDefinitions>
         <ColumnDefinition Width="*" />
@@ -23,7 +26,7 @@
     <forms:VideoView
         x:Name="TrailerVideoView"
         Grid.Row="0"
-        Grid.RowSpan="4"
+        Grid.RowSpan="6"
         Grid.Column="0"
         Grid.ColumnSpan="2"
         AutoPlay="True"
@@ -34,7 +37,7 @@
     <Image
         x:Name="PosterImage"
         Grid.Row="0"
-        Grid.RowSpan="4"
+        Grid.RowSpan="6"
         Grid.Column="0"
         Grid.ColumnSpan="2"
         Aspect="AspectFill"
@@ -43,21 +46,19 @@
         VerticalOptions="FillAndExpand" />
     <Image
         x:Name="TitleImage"
-        Grid.Row="0"
-        Grid.Column="0"
-        Margin="20,100,0,15"
-        AnchorX="0"
-        AnchorY="2.5"
-        HeightRequest="247"
-        HorizontalOptions="FillAndExpand"
-        Source="{Binding Dashboard.BillboardMovie.PosterTitleImageUrl}"
-        WidthRequest="617" />
-
-    <Label
-        x:Name="TitleLabel"
         Grid.Row="1"
         Grid.Column="0"
-        Margin="20,0,0,10"
+        AnchorX="0"
+        AnchorY="2.5"
+        Margin="20,0,0,0"
+        HeightRequest="247"
+        Aspect="AspectFit"
+        Source="{Binding Dashboard.BillboardMovie.PosterTitleImageUrl}"/>
+    <Label
+        x:Name="TitleLabel"
+        Grid.Row="2"
+        Grid.Column="0"
+        Margin="20,0,0,0"
         FontFamily="RobotoBold"
         FontSize="Title"
         HorizontalTextAlignment="Start"
@@ -74,9 +75,9 @@
 
     <Label
         x:Name="DescriptionLabel"
-        Grid.Row="2"
+        Grid.Row="3"
         Grid.Column="0"
-        Margin="20,0,0,10"
+        Margin="20,0,0,0"
         FontFamily="RobotoNormal"
         FontSize="Subtitle"
         TextColor="White"
@@ -94,55 +95,58 @@
     </Label>
 
     <StackLayout
-        Grid.Row="3"
+        Grid.Row="4"
         Grid.Column="0"
-        Padding="20,0,20,0"
+        Padding="20,0,0,0"
         Orientation="Horizontal"
-        Spacing="10">
+        Spacing="10"
+        HeightRequest="50">
         <Button
             x:Name="PlayButton"
             BackgroundColor="#FFFFFF"
-            ImageSource="play.png"
+            ImageSource="{markupExtensions:ImageResource play}"
             CornerRadius="4"
             FontFamily="RobotoBold"
             FontSize="19"
-            HeightRequest="50"
             HorizontalOptions="Start"
             Text="Play"
             TextColor="Black"
-            WidthRequest="120" />
+            WidthRequest="120"
+            VerticalOptions="Fill"/>
         <Button
             x:Name="MoreButton"
             BackgroundColor="#545457"
             CornerRadius="4"
-            ImageSource="info.png"
+            ImageSource="{markupExtensions:ImageResource info}"
             FontFamily="RobotoBold"
             FontSize="19"
-            HeightRequest="50"
             HorizontalOptions="Start"
             Text="More Info"
             TextColor="#FFFFFF"
-            WidthRequest="180" />
+            WidthRequest="180" 
+            VerticalOptions="Fill"/>
     </StackLayout>
 
     <StackLayout
-        Grid.Row="3"
+        Grid.Row="4"
         Grid.Column="1"
         Margin="0,0,100,0"
         Orientation="Horizontal"
         Spacing="8"
-        HorizontalOptions="End">
+        HeightRequest="45"
+        HorizontalOptions="End"
+        VerticalOptions="Center">
         <Button
             BackgroundColor="#545457"
             Clicked="RepeatButtonClicked"
-            HeightRequest="45"
             BorderColor="White"
             BorderWidth="2"
             WidthRequest="50"
             CornerRadius="22"
-            ImageSource="repeat.png"
+            ImageSource="{markupExtensions:ImageResource repeat}"
             Opacity="0.5"
-            TextColor="White" />
+            TextColor="White" 
+            VerticalOptions="Fill"/>
         <Line
             X1="3"
             Y1="7"
@@ -154,13 +158,13 @@
             x:Name="MuteButton"
             BackgroundColor="#545457"
             Clicked="MuteButtonClicked"
-            HeightRequest="45"
             BorderColor="White"
             BorderWidth="2"
             WidthRequest="50"
             CornerRadius="22"
-            ImageSource="unMute.png"
+            ImageSource="{markupExtensions:ImageResource unMute}"
             Opacity="0.5"
-            TextColor="White" />
+            TextColor="White" 
+            VerticalOptions="Fill"/>
     </StackLayout>
 </Grid>
