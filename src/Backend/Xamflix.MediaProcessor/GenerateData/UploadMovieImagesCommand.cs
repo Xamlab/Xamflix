@@ -25,7 +25,7 @@ namespace Xamflix.MediaProcessor.GenerateData
             _blobService = blobService;
         }
 
-        public IPipelineCommand<GenerateDataContext, GenerateDataResult> Next { get; set; }
+        public IPipelineCommand<GenerateDataContext, GenerateDataResult> Next { get; set; } = null!;
 
         public async Task<GenerateDataResult> ExecuteAsync(GenerateDataContext context, CancellationToken token = default)
         {

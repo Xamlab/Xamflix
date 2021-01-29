@@ -18,7 +18,7 @@ namespace Xamflix.MediaProcessor.GenerateData
             _realmFactory = realmFactory;
         }
 
-        public IPipelineCommand<GenerateDataContext, GenerateDataResult> Next { get; set; }
+        public IPipelineCommand<GenerateDataContext, GenerateDataResult> Next { get; set; } = null!;
 
         public async Task<GenerateDataResult> ExecuteAsync(GenerateDataContext context, CancellationToken token = default)
         {
@@ -41,7 +41,7 @@ namespace Xamflix.MediaProcessor.GenerateData
             });
             
             
-            return new GenerateDataResult(true);
+            return await Next.ExecuteAsync(context, token);
         }
 
         private async Task<Dashboard> GetDashboardAsync(Realm realm, GenerateDataContext context)

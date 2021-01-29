@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xamflix.Core.Pipeline;
 using Xamflix.Domain.Data.Realm;
-using Xamflix.Domain.Models;
 
 namespace Xamflix.MediaProcessor.GenerateData
 {
@@ -16,7 +15,8 @@ namespace Xamflix.MediaProcessor.GenerateData
             _realmFactory = realmFactory;
         }
 
-        public IPipelineCommand<GenerateDataContext, GenerateDataResult> Next { get; set; }
+        public IPipelineCommand<GenerateDataContext, GenerateDataResult> Next { get; set; } = null!;
+        public bool IsTerminal { get; set; } = false;
 
         public async Task<GenerateDataResult> ExecuteAsync(GenerateDataContext context, CancellationToken token = default)
         {
@@ -34,7 +34,7 @@ namespace Xamflix.MediaProcessor.GenerateData
                 return new GenerateDataResult($"Something went wrong while refreshing realm.", ex);
             }
 
-            return await Next.ExecuteAsync(context, token);
+            return IsTerminal ? new GenerateDataResult(true) : await Next.ExecuteAsync(context, token);
         }
     }
 }

@@ -13,6 +13,7 @@ namespace Xamflix.MediaProcessor.GenerateData
         private readonly UploadMovieImagesCommand _uploadMovieImagesCommand;
         private readonly UploadMovieTrailersCommand _uploadMovieTrailersCommand;
         private readonly BuildBillboardCommand _buildBillboardCommand;
+        private readonly RefreshRealmCommand _finalRefreshRealmCommand;
 
         public GenerateDataPipelineFactory(RefreshRealmCommand refreshRealmCommand,
                                            LoadMovieImportsCommand loadMovieImportsCommand,
@@ -22,7 +23,8 @@ namespace Xamflix.MediaProcessor.GenerateData
                                            GenerateMoviesCommand generateMoviesCommand,
                                            UploadMovieImagesCommand uploadMovieImagesCommand,
                                            UploadMovieTrailersCommand uploadMovieTrailersCommand,
-                                           BuildBillboardCommand buildBillboardCommand)
+                                           BuildBillboardCommand buildBillboardCommand,
+                                           RefreshRealmCommand finalRefreshRealmCommand)
         {
             _refreshRealmCommand = refreshRealmCommand;
             _loadMovieImportsCommand = loadMovieImportsCommand;
@@ -33,6 +35,8 @@ namespace Xamflix.MediaProcessor.GenerateData
             _uploadMovieImagesCommand = uploadMovieImagesCommand;
             _uploadMovieTrailersCommand = uploadMovieTrailersCommand;
             _buildBillboardCommand = buildBillboardCommand;
+            _finalRefreshRealmCommand = finalRefreshRealmCommand;
+            _finalRefreshRealmCommand.IsTerminal = true;
         }
 
         public IPipelineCommand<GenerateDataContext, GenerateDataResult> CreateGenerateDataPipelineCommand()
@@ -45,7 +49,8 @@ namespace Xamflix.MediaProcessor.GenerateData
                 .ContinueWith(_generateMoviesCommand)
                 .ContinueWith(_uploadMovieImagesCommand)
                 .ContinueWith(_uploadMovieTrailersCommand)
-                .ContinueWith(_buildBillboardCommand);
+                .ContinueWith(_buildBillboardCommand)
+                .ContinueWith(_finalRefreshRealmCommand);
             return _refreshRealmCommand;
         }
     }
