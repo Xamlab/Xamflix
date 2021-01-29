@@ -1,7 +1,6 @@
-﻿using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
-using Xamflix.Domain.Data;
+using Xamflix.Domain.Repositories;
 using Xamflix.ViewModels.Base.Implementation;
 
 namespace Xamflix.ViewModels.Dashboard.Implementation
@@ -9,19 +8,18 @@ namespace Xamflix.ViewModels.Dashboard.Implementation
     internal class LoadDashboardCommand : AsyncCommand
     {
         private readonly DashboardViewModel _viewModel;
-        private readonly IAppDbContext _dbContext;
+        private readonly IDashboardRepository _dashboardRepository;
 
-        public LoadDashboardCommand(DashboardViewModel viewModel, IAppDbContext dbContext)
+        public LoadDashboardCommand(DashboardViewModel viewModel,
+                                    IDashboardRepository dashboardRepository)
         {
             _viewModel = viewModel;
-            _dbContext = dbContext;
+            _dashboardRepository = dashboardRepository;
         }
 
         protected override async Task<bool> ExecuteCoreAsync(CancellationToken token = default)
         {
-            await _dbContext.SynchronizeAsync(token);
-            _viewModel.Dashboard = (await _dbContext.GetItemsAsync<Domain.Models.Dashboard>())
-                .FirstOrDefault(d => d.Name == "Dashboard");
+            _viewModel.Dashboard = await _dashboardRepository.GetDefaultDashboardAsync(token);
             return true;
         }
     }

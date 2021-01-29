@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Xamflix.App.Forms.Configuration;
+using Xamflix.Domain;
 using Xamflix.Domain.Data.Realm;
 using Xamflix.ViewModels;
 
@@ -22,6 +23,7 @@ namespace Xamflix.App.Forms
             return "local".SetupFormsConfigs()
                           .BuildAndRegister(services)
                           .AddRealm()
+                          .AddDomain()
                           .AddViewModels();
         }
     }
