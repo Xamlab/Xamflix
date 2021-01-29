@@ -20,7 +20,7 @@ namespace Xamflix.App.iOS.Services.Implementation
             string documents = NSFileManager.DefaultManager
                                             .GetUrls(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomain.User)[0].Path;
 
-            string tempFolderPath = Path.Combine(documents, "../", "tmp");
+            string tempFolderPath = Path.Combine(documents, "../", "tmp", fileOrFolderName);
             return tempFolderPath;
         }
     }

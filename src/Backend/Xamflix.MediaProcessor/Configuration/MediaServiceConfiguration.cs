@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Xamflix.MediaProcessor
+namespace Xamflix.MediaProcessor.Configuration
 {
     public class MediaServiceConfiguration
     {

@@ -5,10 +5,12 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UserSecretsId>F2CDAA53-6968-43B9-8DC6-4AA2A1984D10</UserSecretsId>
     <StartupObject />
+    <LangVersion>default</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Azure.Storage.Blobs" Version="12.7.0" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.8.0" />
+    <PackageReference Include="CsvHelper" Version="21.2.1" />
     <PackageReference Include="Microsoft.Azure.Management.Media" Version="3.0.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="5.0.0" />
@@ -18,10 +20,16 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="Microsoft.Rest.ClientRuntime.Azure.Authentication" Version="2.4.1" />
     <PackageReference Include="Realm" Version="10.0.0-beta.5" />
+    <PackageReference Include="System.Linq.Async" Version="5.0.0" />
   </ItemGroup>
   <ItemGroup>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\Xamflix.Core\Xamflix.Core.csproj" />
+    <ProjectReference Include="..\..\Common\Xamflix.Domain.Data.Realm\Xamflix.Domain.Data.Realm.csproj" />
+    <ProjectReference Include="..\..\Common\Xamflix.Domain.Models\Xamflix.Domain.Models.csproj" />
   </ItemGroup>
 </Project>

@@ -4,6 +4,7 @@ namespace Xamflix.Domain.Data.Realm
 {
     public interface IRealmFactory
     {
-        Task<Realms.Realm> GetDefaultRealmAsync();
+        Task<Realms.Realm> GetDefaultSyncedRealmAsync();
+        Task<Realms.Realm> GetDefaultLocalRealmAsync();
     }
 }

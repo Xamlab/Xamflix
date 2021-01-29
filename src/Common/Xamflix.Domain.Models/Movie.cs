@@ -15,7 +15,9 @@ namespace Xamflix.Domain.Models
 
         public string? PosterTitleImageUrl { get; set; }
         public string? PosterImageUrl { get; set; }
-
+        public string? ThumbnailImageUrl { get; set; }
+        public string? TallThumbnailImageUrl { get; set; }
+        public string? StreamingUrl { get; set; }
         public int Year { get; set; }
         public int DurationInSeconds { get; set; }
         public int MaturityRating { get; set; }

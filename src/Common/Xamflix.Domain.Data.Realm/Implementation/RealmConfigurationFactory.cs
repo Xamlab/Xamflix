@@ -10,7 +10,7 @@ namespace Xamflix.Domain.Data.Realm.Implementation
         private readonly RealmDbConfiguration _configuration;
         private readonly ISystemPathService _systemPathService;
         private readonly IRealmMigrationFactory _migrationFactory;
-
+        private RealmConfigurationBase? _syncedConfiguration;
         public RealmConfigurationFactory(RealmDbConfiguration configuration,
                                          ISystemPathService systemPathService,
                                          IRealmMigrationFactory migrationFactory)
@@ -20,13 +20,24 @@ namespace Xamflix.Domain.Data.Realm.Implementation
             _migrationFactory = migrationFactory;
         }
 
-        public async Task<RealmConfigurationBase> GetDefaultConfigurationAsync()
+        public async Task<RealmConfigurationBase> GetDefaultSyncedConfigurationAsync()
         {
+            if(_syncedConfiguration != null)
+            {
+                return _syncedConfiguration;
+            }
+            
             var app = App.Create(_configuration.CloudAppId);
             var user = await app.LogInAsync(Credentials.ApiKey(_configuration.ApiKey));
             var localDbPath = _systemPathService.GetLocalPath(_configuration.DbFileName);
-            var configuration = new SyncConfiguration("DASHBOARD", user, localDbPath);
-            return configuration;
+            _syncedConfiguration = new SyncConfiguration("DASHBOARD", user, localDbPath);
+            return _syncedConfiguration;
+        }
+
+        public Task<RealmConfigurationBase> GetDefaultLocalConfigurationAsync()
+        {
+            var localDbPath = _systemPathService.GetLocalPath(_configuration.DbFileName);
+            return Task.FromResult(GetConfigurationWithPath(localDbPath));
         }
 
         private RealmConfigurationBase GetConfigurationWithPath(string realmDbPath)
