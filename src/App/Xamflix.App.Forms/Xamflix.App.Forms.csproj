@@ -15,9 +15,8 @@
   <ItemGroup>
     <EmbeddedResource Include="**\*.svg" />
     <EmbeddedResource Include="**\*.png" />
-    <None Remove="appsettings.json" />
+    <EmbeddedResource Include="**\*.ttf" />
     <EmbeddedResource Include="appsettings.json" />
-    <None Remove="appsettings.local.json" />
     <EmbeddedResource Include="appsettings.local.json" />
   </ItemGroup>
 
