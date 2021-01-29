@@ -16,7 +16,7 @@ namespace Xamflix.MediaProcessor.GenerateData
         }
 
         public IPipelineCommand<GenerateDataContext, GenerateDataResult> Next { get; set; } = null!;
-        public bool IsTerminal { get; set; } = false;
+        public bool IsTerminal { get; set; }
 
         public async Task<GenerateDataResult> ExecuteAsync(GenerateDataContext context, CancellationToken token = default)
         {
