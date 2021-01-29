@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -29,15 +30,18 @@ namespace Xamflix.MediaProcessor.GenerateData
         public async Task<GenerateDataResult> ExecuteAsync(GenerateDataContext context, CancellationToken token = default)
         {
             Console.WriteLine("Uploading movie trailers");
-            var uploadTasks = context.MovieImports
-                                     .Select(import => new
-                                                       {
-                                                           MovieImport = import,
-                                                           MovieId = context.Movies[import]
-                                                       })
-                                     .Select(import => UploadMovieTrailerAsync(context, import.MovieId, import.MovieImport));
-            var taskResults = await Task.WhenAll(uploadTasks);
-            var failedTasks = taskResults.Where(t => !t.IsSuccessful).ToArray();
+            List<TaskResult<bool>> results = new();
+            for(int offset = 0; offset < context.MovieImports.Length; offset=results.Count)
+            {
+                var uploadTasks = context.MovieImports
+                                         .Skip(offset)
+                                         .Take(context.UploadTrailerBatchSize)
+                                         .Select(import => UploadMovieTrailerAsync(context, context.Movies[import], import));
+                var taskResults = await Task.WhenAll(uploadTasks);
+                results.AddRange(taskResults);
+            }
+            
+            var failedTasks = results.Where(t => !t.IsSuccessful).ToArray();
 
             if(failedTasks.Any())
             {

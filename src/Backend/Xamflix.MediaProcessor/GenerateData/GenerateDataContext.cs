@@ -23,6 +23,7 @@ namespace Xamflix.MediaProcessor.GenerateData
         public Dictionary<string, ObjectId> Genres { get; } = new();
 
         public Dictionary<MovieImport, ObjectId> Movies { get; } = new();
+        public int UploadTrailerBatchSize { get; set; } = 10;
         
         public IEnumerable<string> GetNonEmptyListFromCommaSeparatedValues(string commaSeparateString)
         {
