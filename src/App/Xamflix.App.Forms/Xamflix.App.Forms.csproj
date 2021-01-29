@@ -6,6 +6,7 @@
     <LangVersion>default</LangVersion>
     <UserSecretsId>FF998E9D-F9E1-4B45-8C40-1DF3719202C8</UserSecretsId>
     <Nullable>enable</Nullable>
+    <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -14,15 +15,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="**\*.svg" />
+    <EmbeddedResource Include="**\*.xaml" SubType="Designer" Generator="MSBuild:UpdateDesignTimeXaml" />
+    <Compile Update="**\*.xaml.cs" Subtype="Code" DependentUpon="%(Filename)" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Include="**\*.png" />
     <EmbeddedResource Include="**\*.ttf" />
     <EmbeddedResource Include="appsettings.json" />
     <EmbeddedResource Include="appsettings.local.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="Resources\Images\the_midnight_sky_poster.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,10 +47,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Pages\Dashboard\BillboardView.xaml.cs">
-      <DependentUpon>BillboardView.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <!--<SharedImage Include="Resources\Images\info.svg" BaseSize="29,29" />
+    <SharedImage Include="Resources\Images\mute.svg" BaseSize="31,31" />
+    <SharedImage Include="Resources\Images\play.svg" BaseSize="31,31" />
+    <SharedImage Include="Resources\Images\repeat.svg" BaseSize="31,31" />-->
+    <!--<SharedImage Include="Resources\Images\unMute.svg" BaseSize="31,31" />-->
   </ItemGroup>
 
 </Project>

@@ -1,31 +1,96 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 
 <ContentPage
+    x:Class="Xamflix.App.Forms.Pages.Dashboard.DashboardPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:dashboard="clr-namespace:Xamflix.App.Forms.Pages.Dashboard;assembly=Xamflix.App.Forms"
     xmlns:dashboard1="clr-namespace:Xamflix.ViewModels.Dashboard;assembly=Xamflix.ViewModels"
-    x:Class="Xamflix.App.Forms.Pages.Dashboard.DashboardPage"
-    x:DataType="dashboard1:IDashboardViewModel">
+    xmlns:models="clr-namespace:Xamflix.Domain.Models;assembly=Xamflix.Domain.Models"
+    xmlns:effects="clr-namespace:Xamflix.App.Forms.Effects;assembly=Xamflix.App.Forms"
+    x:DataType="dashboard1:IDashboardViewModel"
+    BackgroundColor="Black">
     <ContentPage.Content>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="9*" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <dashboard:BillboardView
-                x:Name="BillboardView"
-                IsVisible="{Binding Dashboard, Converter={StaticResource VisibilityConverter}}"
-                Grid.Row="0"
-                HorizontalOptions="Fill"
-                VerticalOptions="Fill" />
+        <Grid
+            Padding="0"
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="FillAndExpand">
+            <CollectionView
+                HorizontalScrollBarVisibility="Always"
+                ItemsSource="{Binding Dashboard.Categories}"
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="FillAndExpand">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout
+                        Orientation="Vertical"
+                        ItemSpacing="10" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.Header>
+                    <dashboard:BillboardView
+                        x:Name="BillboardView"
+                        IsVisible="{Binding Dashboard, Converter={StaticResource VisibilityConverter}}"
+                        HorizontalOptions="FillAndExpand" 
+                        VerticalOptions="Start"/>
+                </CollectionView.Header>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Category">
+                        <Grid RowSpacing="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="170" />
+                            </Grid.RowDefinitions>
+                            <Label
+                                Grid.Row="0"
+                                Margin="20,0,0,0"
+                                FontFamily="RobotoBold"
+                                FontSize="Title"
+                                HorizontalTextAlignment="Start"
+                                Text="{Binding Name}"
+                                TextColor="White">
+                                <Label.Effects>
+                                    <effects:ShadowEffect
+                                        Radius="5"
+                                        DistanceX="2"
+                                        DistanceY="2"
+                                        Color="Black" />
+                                </Label.Effects>
+                            </Label>
+                            <CollectionView
+                                Grid.Row="1"
+                                Margin="10,0,0,10"
+                                HorizontalScrollBarVisibility="Always"
+                                ItemsSource="{Binding Movies}">
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout
+                                        Orientation="Horizontal"
+                                        ItemSpacing="5" />
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate x:DataType="models:Movie">
+                                        <Frame
+                                            Padding="0"
+                                            CornerRadius="5"
+                                            BackgroundColor="#88545457"
+                                            IsClippedToBounds="True">
+                                            <Image
+                                                HeightRequest="160"
+                                                WidthRequest="290"
+                                                Aspect="AspectFill"
+                                                Source="{Binding ThumbnailImageUrl}" />
+                                        </Frame>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
             <ActivityIndicator
-                Grid.Row="0"
-                Grid.RowSpan="2"
                 IsVisible="{Binding LoadCommand.IsBusy}"
                 IsRunning="{Binding LoadCommand.IsBusy}"
                 HorizontalOptions="Center"
-                VerticalOptions="Center"/>
+                VerticalOptions="Center" />
         </Grid>
     </ContentPage.Content>
 </ContentPage>

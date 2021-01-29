@@ -106,9 +106,49 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\info.scale-100.png" />
+    <Content Include="Assets\info.scale-125.png" />
+    <Content Include="Assets\info.scale-150.png" />
+    <Content Include="Assets\info.scale-200.png" />
+    <Content Include="Assets\info.scale-250.png" />
+    <Content Include="Assets\info.scale-300.png" />
+    <Content Include="Assets\info.scale-350.png" />
+    <Content Include="Assets\info.scale-400.png" />
     <Content Include="Assets\LargeTile.scale-100.png" />
     <Content Include="Assets\LargeTile.scale-200.png" />
     <Content Include="Assets\LargeTile.scale-400.png" />
+    <Content Include="Assets\mute.scale-100.png" />
+    <Content Include="Assets\mute.scale-125.png" />
+    <Content Include="Assets\mute.scale-150.png" />
+    <Content Include="Assets\mute.scale-200.png" />
+    <Content Include="Assets\mute.scale-250.png" />
+    <Content Include="Assets\mute.scale-300.png" />
+    <Content Include="Assets\mute.scale-350.png" />
+    <Content Include="Assets\mute.scale-400.png" />
+    <Content Include="Assets\play.scale-100.png" />
+    <Content Include="Assets\play.scale-125.png" />
+    <Content Include="Assets\play.scale-150.png" />
+    <Content Include="Assets\play.scale-200.png" />
+    <Content Include="Assets\play.scale-250.png" />
+    <Content Include="Assets\play.scale-300.png" />
+    <Content Include="Assets\play.scale-350.png" />
+    <Content Include="Assets\play.scale-400.png" />
+    <Content Include="Assets\repeat.scale-100.png" />
+    <Content Include="Assets\repeat.scale-125.png" />
+    <Content Include="Assets\repeat.scale-150.png" />
+    <Content Include="Assets\repeat.scale-200.png" />
+    <Content Include="Assets\repeat.scale-250.png" />
+    <Content Include="Assets\repeat.scale-300.png" />
+    <Content Include="Assets\repeat.scale-350.png" />
+    <Content Include="Assets\repeat.scale-400.png" />
+    <Content Include="Assets\unMute.scale-100.png" />
+    <Content Include="Assets\unMute.scale-125.png" />
+    <Content Include="Assets\unMute.scale-150.png" />
+    <Content Include="Assets\unMute.scale-200.png" />
+    <Content Include="Assets\unMute.scale-250.png" />
+    <Content Include="Assets\unMute.scale-300.png" />
+    <Content Include="Assets\unMute.scale-350.png" />
+    <Content Include="Assets\unMute.scale-400.png" />
     <Content Include="Assets\SmallTile.scale-100.png" />
     <Content Include="Assets\SmallTile.scale-200.png" />
     <Content Include="Assets\SmallTile.scale-400.png" />
@@ -169,6 +209,7 @@
       <Name>Xamflix.App.Forms</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
