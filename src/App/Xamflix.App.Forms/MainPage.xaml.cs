@@ -14,7 +14,7 @@ namespace Xamflix.App.Forms
 {
     public partial class MainPage
     {
-        private bool _colapsed = false;
+        private bool _collapsed;
 
         public MainPage()
         {
@@ -34,14 +34,14 @@ namespace Xamflix.App.Forms
                 case MediaPlayerState.Playing:
                 {
                     await PosterImage.FadeTo(0);
-                        await Animate();
-                        break;
+                    await Animate();
+                    break;
                 }
                 default:
-               {
-                        await PosterImage.FadeTo(1);
-                        break;
-               }
+                {
+                    await PosterImage.FadeTo(1);
+                    break;
+                }
             }
         }
 
@@ -86,34 +86,33 @@ namespace Xamflix.App.Forms
             // Title Image
             var imageAnimation1 = new Animation(v => TitleImage.Scale = v, 1, 0.7, Easing.CubicOut);
             var imageAnimation2 = new Animation(v => TitleImage.Opacity = v, 1, 0.5, Easing.Linear);
-            
+
             // Title Label
             var titleLabelAnimation1 = new Animation(v => TitleLabel.Opacity = v, 1, 0, Easing.Linear);
             var titleLabelAnimation2 = new Animation(v => TitleLabel.TranslationY = v, TitleLabel.TranslationY, 60, Easing.Linear);
-            
+
             // Title Description
             var descriptionAnimation1 = new Animation(v => DescriptionLabel.Opacity = v, 1, 0, Easing.Linear);
             var descriptionAnimation2 = new Animation(v => DescriptionLabel.TranslationY = v, DescriptionLabel.TranslationY, 60, Easing.Linear);
-            
+
             // Buttons
             var buttonAnimation1 = new Animation(v => PlayButton.Opacity = v, 1, 0.6, Easing.Linear);
             var buttonAnimation2 = new Animation(v => MoreButton.Opacity = v, 1, 0.6, Easing.Linear);
 
             parentAnimation.Add(0.1, 1, imageAnimation1);
             parentAnimation.Add(0, 1, imageAnimation2);
-          
+
             parentAnimation.Add(0, 0.3, titleLabelAnimation1);
             parentAnimation.Add(0, 0.5, titleLabelAnimation2);
-            
+
             parentAnimation.Add(0, 0.3, descriptionAnimation1);
             parentAnimation.Add(0, 0.5, descriptionAnimation2);
-            
 
             parentAnimation.Add(0, 1, buttonAnimation1);
             parentAnimation.Add(0, 1, buttonAnimation2);
 
             parentAnimation.Commit(this, "ScaleDownAnimation", 16, 1000, null, null);
-            _colapsed = true;
+            _collapsed = true;
         }
 
         private async Task ScaleOutTitleImageAsync()
@@ -149,16 +148,17 @@ namespace Xamflix.App.Forms
             parentAnimation.Add(0, 1, buttonAnimation1);
             parentAnimation.Add(0, 1, buttonAnimation2);
 
-            parentAnimation.Commit(this, "ScaleOutAnimation", 16, 1000, null,null);
-            _colapsed = false;
+            parentAnimation.Commit(this, "ScaleOutAnimation", 16, 1000, null, null);
+            _collapsed = false;
         }
 
-        private async Task Animate() 
+        private async Task Animate()
         {
-            if (_colapsed)
+            if(_collapsed)
             {
                 await ScaleOutTitleImageAsync();
             }
+
             await ScaleDownTitleImageAsync();
         }
 
@@ -171,12 +171,13 @@ namespace Xamflix.App.Forms
             //Play();
             await Animate();
         }
-        private void Play() 
+
+        private void Play()
         {
             var media = new MediaItem(Uri.EscapeUriString(@"https://xamflixdevgwcmedia-gewc1.streaming.media.azure.net/9f4ee191-59ff-48bf-bf53-2bfbec396d8b/The Midnight Sky  Final Trailer .ism/manifest(format=m3u8-aapl)"))
-            {
-                MediaType = MediaType.Hls
-            };
+                        {
+                            MediaType = MediaType.Hls
+                        };
             TrailerVideoView.Source = media;
             Trace.WriteLine($"Setting media item  {JsonSerializer.Serialize(media)}");
         }
