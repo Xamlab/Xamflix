@@ -66,21 +66,26 @@
     <Reference Include="System.Numerics.Vectors" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="Plugin.MediaManager">
       <Version>1.0.8</Version>
     </PackageReference>
     <PackageReference Include="Plugin.MediaManager.AzureMediaServices" Version="1.0.6" />
-    <PackageReference Include="Plugin.MediaManager.Forms">
-      <Version>1.0.8</Version>
+    <PackageReference Include="Plugin.MediaManager.Forms" Version="1.0.8" />
+    <PackageReference Include="Realm">
+      <Version>10.0.0-beta.5</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.1905" />
     <PackageReference Include="Xamarin.Essentials" Version="1.6.0" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bootstrapper.cs" />
     <Compile Include="LabelShadowEffect.cs" />
     <Compile Include="MainActivity.cs" />
+    <Compile Include="MainApplication.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\Implementation\SystemPathService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
@@ -108,6 +113,10 @@
     <Folder Include="Resources\drawable\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\Xamflix.Core\Xamflix.Core.csproj">
+      <Project>{26fb9b2c-4a7b-418e-9ca5-8a796f3d6f5e}</Project>
+      <Name>Xamflix.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Xamflix.App.Forms\Xamflix.App.Forms.csproj">
       <Project>{6dac001c-95c6-48a3-913d-90887fdf7ef6}</Project>
       <Name>Xamflix.App.Forms</Name>
