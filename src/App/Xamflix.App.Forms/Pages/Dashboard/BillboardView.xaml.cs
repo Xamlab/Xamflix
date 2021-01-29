@@ -16,7 +16,7 @@ namespace Xamflix.App.Forms.Pages.Dashboard
 {
     public partial class BillboardView
     {
-        private bool _collapsed = false;
+        private bool _collapsed;
 
         public BillboardView()
         {
@@ -40,10 +40,10 @@ namespace Xamflix.App.Forms.Pages.Dashboard
                                 MediaType = MediaType.Hls
                             };
                 TrailerVideoView.Source = media;
-                Trace.WriteLine($"Setting media item  {JsonSerializer.Serialize(media)}");   
+                Trace.WriteLine($"Setting media item  {JsonSerializer.Serialize(media)}");
             }
         }
-        
+
         [AsyncVoidCheckExemption("Bridging UI lifecycle with async code")]
         private async void CurrentOnStateChanged(object sender, StateChangedEventArgs e)
         {
@@ -53,6 +53,11 @@ namespace Xamflix.App.Forms.Pages.Dashboard
                 {
                     await PosterImage.FadeTo(0);
                     await Animate();
+                    break;
+                }
+                case MediaPlayerState.Stopped:
+                {
+                    await ScaleOutTitleImageAsync();
                     break;
                 }
                 default:
@@ -88,7 +93,7 @@ namespace Xamflix.App.Forms.Pages.Dashboard
         {
             Trace.WriteLine($"CurrentOnMediaItemFailed  {e.Buffered}");
         }
-        
+
         private async Task ScaleDownTitleImageAsync()
         {
             await Task.Delay(7000);
@@ -122,7 +127,7 @@ namespace Xamflix.App.Forms.Pages.Dashboard
             parentAnimation.Add(0, 1, buttonAnimation1);
             parentAnimation.Add(0, 1, buttonAnimation2);
 
-            parentAnimation.Commit(this, "ScaleDownAnimation", 16, 1000, null, null);
+            parentAnimation.Commit(this, "ScaleDownAnimation", 16, 1000);
             _collapsed = true;
         }
 
@@ -159,7 +164,7 @@ namespace Xamflix.App.Forms.Pages.Dashboard
             parentAnimation.Add(0, 1, buttonAnimation1);
             parentAnimation.Add(0, 1, buttonAnimation2);
 
-            parentAnimation.Commit(this, "ScaleOutAnimation", 16, 1000, null, null);
+            parentAnimation.Commit(this, "ScaleOutAnimation", 16, 1000);
             _collapsed = false;
         }
 
@@ -182,6 +187,20 @@ namespace Xamflix.App.Forms.Pages.Dashboard
             }
 
             Play();
+        }
+
+        private void MuteButtonClicked(object sender, EventArgs e)
+        {
+            if(CrossMediaManager.Current.Volume.Muted)
+            {
+                CrossMediaManager.Current.Volume.Muted = false;
+                MuteButton.ImageSource = "unMute.png";
+            }
+            else
+            {
+                CrossMediaManager.Current.Volume.Muted = true;
+                MuteButton.ImageSource = "mute.png";
+            }
         }
     }
 }

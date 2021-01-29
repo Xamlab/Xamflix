@@ -6,6 +6,7 @@
     <LangVersion>default</LangVersion>
     <UserSecretsId>FF998E9D-F9E1-4B45-8C40-1DF3719202C8</UserSecretsId>
     <Nullable>enable</Nullable>
+    <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -14,15 +15,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="**\*.xaml" SubType="Designer" Generator="MSBuild:UpdateDesignTimeXaml" />
+    <Compile Update="**\*.xaml.cs" Subtype="Code" DependentUpon="%(Filename)" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Include="**\*.svg" />
     <EmbeddedResource Include="**\*.png" />
     <EmbeddedResource Include="**\*.ttf" />
     <EmbeddedResource Include="appsettings.json" />
     <EmbeddedResource Include="appsettings.local.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="Resources\Images\the_midnight_sky_poster.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,6 +36,7 @@
     <PackageReference Include="Plugin.MediaManager.AzureMediaServices" Version="1.0.6" />
     <PackageReference Include="Plugin.MediaManager.Forms" Version="1.0.8" />
     <PackageReference Include="Realm" Version="10.0.0-beta.6" />
+    <PackageReference Include="Resizetizer.NT" Version="0.2.0" />
     <PackageReference Include="System.Text.Json" Version="5.0.1" />
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.1931" />
     <PackageReference Include="Xamarin.Essentials" Version="1.6.1" />
@@ -46,10 +49,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Pages\Dashboard\BillboardView.xaml.cs">
-      <DependentUpon>BillboardView.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <SharedImage Include="Resources\Images\info.svg" BaseSize="29,29" />
+    <SharedImage Include="Resources\Images\mute.svg" BaseSize="31,31" />
+    <SharedImage Include="Resources\Images\play.svg" BaseSize="31,31" />
+    <SharedImage Include="Resources\Images\repeat.svg" BaseSize="31,31" />
+    <SharedImage Include="Resources\Images\unMute.svg" BaseSize="31,31" />
   </ItemGroup>
-
 </Project>
