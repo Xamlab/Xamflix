@@ -9,14 +9,12 @@
     x:Name="ParentGrid"
     x:DataType="dashboard:IDashboardViewModel"
     ColumnSpacing="10"
-    RowSpacing="0">
+    RowSpacing="5">
     <Grid.RowDefinitions>
         <RowDefinition Height="Auto" />
         <RowDefinition Height="Auto" />
         <RowDefinition Height="Auto" />
-        <RowDefinition Height="Auto" />
-        <RowDefinition Height="Auto" />
-        <RowDefinition Height="*" />
+        <RowDefinition Height="50" />
     </Grid.RowDefinitions>
     <Grid.ColumnDefinitions>
         <ColumnDefinition Width="*" />
@@ -25,18 +23,18 @@
     <forms:VideoView
         x:Name="TrailerVideoView"
         Grid.Row="0"
-        Grid.RowSpan="6"
+        Grid.RowSpan="4"
         Grid.Column="0"
         Grid.ColumnSpan="2"
         AutoPlay="True"
-        HorizontalOptions="FillAndExpand"
+        HorizontalOptions="Fill"
         ShowControls="False"
-        VerticalOptions="FillAndExpand"
-        VideoAspect="AspectFill" />
+        VerticalOptions="Fill"
+        VideoAspect="AspectFit" />
     <Image
         x:Name="PosterImage"
         Grid.Row="0"
-        Grid.RowSpan="6"
+        Grid.RowSpan="4"
         Grid.Column="0"
         Grid.ColumnSpan="2"
         Aspect="AspectFill"
@@ -45,7 +43,7 @@
         VerticalOptions="FillAndExpand" />
     <Image
         x:Name="TitleImage"
-        Grid.Row="1"
+        Grid.Row="0"
         Grid.Column="0"
         Margin="20,100,0,15"
         AnchorX="0"
@@ -54,9 +52,10 @@
         HorizontalOptions="FillAndExpand"
         Source="{Binding Dashboard.BillboardMovie.PosterTitleImageUrl}"
         WidthRequest="617" />
+
     <Label
         x:Name="TitleLabel"
-        Grid.Row="2"
+        Grid.Row="1"
         Grid.Column="0"
         Margin="20,0,0,10"
         FontFamily="RobotoBold"
@@ -72,9 +71,10 @@
                 Color="Black" />
         </Label.Effects>
     </Label>
+
     <Label
         x:Name="DescriptionLabel"
-        Grid.Row="3"
+        Grid.Row="2"
         Grid.Column="0"
         Margin="20,0,0,10"
         FontFamily="RobotoNormal"
@@ -92,9 +92,9 @@
                 Color="Black" />
         </Label.Effects>
     </Label>
+
     <StackLayout
-        x:Name="InfoContainer"
-        Grid.Row="4"
+        Grid.Row="3"
         Grid.Column="0"
         Padding="20,0,20,0"
         Orientation="Horizontal"
@@ -126,7 +126,7 @@
     </StackLayout>
 
     <StackLayout
-        Grid.Row="4"
+        Grid.Row="3"
         Grid.Column="1"
         Margin="0,0,100,0"
         Orientation="Horizontal"
