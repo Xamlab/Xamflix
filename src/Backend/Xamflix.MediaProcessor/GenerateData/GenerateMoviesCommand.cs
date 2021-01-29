@@ -52,19 +52,28 @@ namespace Xamflix.MediaProcessor.GenerateData
                         foreach(var categoryName in context.GetNonEmptyListFromCommaSeparatedValues(movieImport.Categories))
                         {
                             Category category = realm.Find<Category>(context.Categories[categoryName]);
-                            category.Movies.Add(movie);
+                            if(!category.Movies.Contains(movie))
+                            {
+                                category.Movies.Add(movie);
+                            }
                         }
 
                         foreach(var actorName in context.GetNonEmptyListFromCommaSeparatedValues(movieImport.Cast))
                         {
                             var actor = realm.Find<Person>(context.People[actorName]);
-                            movie.Cast.Add(actor);
+                            if(!movie.Cast.Contains(actor))
+                            {
+                                movie.Cast.Add(actor);
+                            }
                         }
 
                         foreach(var genreName in context.GetNonEmptyListFromCommaSeparatedValues(movieImport.Genres))
                         {
                             Genre genre = realm.Find<Genre>(context.Genres[genreName]);
-                            movie.Genres.Add(genre);
+                            if(!movie.Genres.Contains(genre))
+                            {
+                                movie.Genres.Add(genre);
+                            }
                         }
 
                         createdMovie = movie;

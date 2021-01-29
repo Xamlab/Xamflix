@@ -51,7 +51,7 @@ namespace Xamflix.MediaProcessor.GenerateData
             }
 
             Console.WriteLine("Movie trailers successfully uploaded");
-            return new GenerateDataResult(true);
+            return await Next.ExecuteAsync(context, token);
         }
 
         private async Task<TaskResult<bool>> UploadMovieTrailerAsync(GenerateDataContext context, ObjectId movieId, MovieImport movieImport)

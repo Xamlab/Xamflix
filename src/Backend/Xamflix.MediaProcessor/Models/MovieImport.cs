@@ -15,5 +15,7 @@
         public string PosterTitleImageFileName { get; set; }
         public string PosterImageFileName { get; set; }
         public string TallThumbnailFileName { get; set; }
+        public string BillboardPosterImageFileName { get; set; }
+        public string BillboardPosterTitleImageFileName { get; set; }
     }
 }

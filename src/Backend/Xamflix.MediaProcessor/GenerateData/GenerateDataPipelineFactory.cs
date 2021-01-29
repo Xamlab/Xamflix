@@ -12,6 +12,7 @@ namespace Xamflix.MediaProcessor.GenerateData
         private readonly GenerateMoviesCommand _generateMoviesCommand;
         private readonly UploadMovieImagesCommand _uploadMovieImagesCommand;
         private readonly UploadMovieTrailersCommand _uploadMovieTrailersCommand;
+        private readonly BuildBillboardCommand _buildBillboardCommand;
 
         public GenerateDataPipelineFactory(RefreshRealmCommand refreshRealmCommand,
                                            LoadMovieImportsCommand loadMovieImportsCommand,
@@ -20,7 +21,8 @@ namespace Xamflix.MediaProcessor.GenerateData
                                            GenerateGenresCommand generateGenresCommand,
                                            GenerateMoviesCommand generateMoviesCommand,
                                            UploadMovieImagesCommand uploadMovieImagesCommand,
-                                           UploadMovieTrailersCommand uploadMovieTrailersCommand)
+                                           UploadMovieTrailersCommand uploadMovieTrailersCommand,
+                                           BuildBillboardCommand buildBillboardCommand)
         {
             _refreshRealmCommand = refreshRealmCommand;
             _loadMovieImportsCommand = loadMovieImportsCommand;
@@ -30,6 +32,7 @@ namespace Xamflix.MediaProcessor.GenerateData
             _generateMoviesCommand = generateMoviesCommand;
             _uploadMovieImagesCommand = uploadMovieImagesCommand;
             _uploadMovieTrailersCommand = uploadMovieTrailersCommand;
+            _buildBillboardCommand = buildBillboardCommand;
         }
 
         public IPipelineCommand<GenerateDataContext, GenerateDataResult> CreateGenerateDataPipelineCommand()
@@ -41,7 +44,8 @@ namespace Xamflix.MediaProcessor.GenerateData
                 .ContinueWith(_generateGenresCommand)
                 .ContinueWith(_generateMoviesCommand)
                 .ContinueWith(_uploadMovieImagesCommand)
-                .ContinueWith(_uploadMovieTrailersCommand);
+                .ContinueWith(_uploadMovieTrailersCommand)
+                .ContinueWith(_buildBillboardCommand);
             return _refreshRealmCommand;
         }
     }
