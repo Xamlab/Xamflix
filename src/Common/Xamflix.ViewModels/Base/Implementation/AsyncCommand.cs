@@ -20,9 +20,9 @@ namespace Xamflix.ViewModels.Base.Implementation
         }
 
         [AsyncVoidCheckExemption("Execute void method of AsyncCommand servers as a bridge between UI non-async code and async business logic.")]
-        public override async void Execute(object parameter)
+        public override async void Execute()
         {
-            await ExecuteAsync(parameter);
+            await ExecuteAsync();
         }
 
         public bool IsBusy { get; private set; }
@@ -35,10 +35,9 @@ namespace Xamflix.ViewModels.Base.Implementation
         ///     Generally this method should not be overridden by child classes, instead, you should override
         ///     <see cref="ExecuteCoreAsync" />.
         /// </summary>
-        /// <param name="parameter">The command parameter.</param>
         /// <param name="token">The cancellation token.</param>
         /// <returns>Asynchronous await-able task.</returns>
-        public virtual async Task ExecuteAsync(object parameter, CancellationToken token = default)
+        public virtual async Task ExecuteAsync(CancellationToken token = default)
         {
             if(IsBusy)
             {
@@ -51,7 +50,7 @@ namespace Xamflix.ViewModels.Base.Implementation
             FailureMessage = null;
             try
             {
-                IsSuccessful = await ExecuteCoreAsync(parameter, token);
+                IsSuccessful = await ExecuteCoreAsync(token);
             }
             catch(Exception ex)
             {
@@ -68,13 +67,12 @@ namespace Xamflix.ViewModels.Base.Implementation
         ///     Executes the core asynchronous operation. Child classes should override this method with their operation
         ///     implementation.
         /// </summary>
-        /// <param name="parameter">The command parameter.</param>
         /// <param name="token">The cancellation token.</param>
         /// <returns>
         ///     Child implementation should return <code>true</code> if the operation is considered successful.
         ///     The returned value will be set to <see cref="IsSuccessful" /> property.
         /// </returns>
-        protected abstract Task<bool> ExecuteCoreAsync(object parameter, CancellationToken token = default);
+        protected abstract Task<bool> ExecuteCoreAsync(CancellationToken token = default);
 
         /// <summary>
         ///     Default exception handler. Sets the <see cref="FailureMessage" /> to

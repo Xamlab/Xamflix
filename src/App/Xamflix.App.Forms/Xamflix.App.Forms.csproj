@@ -5,6 +5,7 @@
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <LangVersion>default</LangVersion>
     <UserSecretsId>FF998E9D-F9E1-4B45-8C40-1DF3719202C8</UserSecretsId>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -42,6 +43,13 @@
     <ProjectReference Include="..\..\Common\Xamflix.Domain.Data.Realm\Xamflix.Domain.Data.Realm.csproj" />
     <ProjectReference Include="..\..\Common\Xamflix.Domain\Xamflix.Domain.csproj" />
     <ProjectReference Include="..\..\Common\Xamflix.ViewModels\Xamflix.ViewModels.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Pages\Dashboard\BillboardView.xaml.cs">
+      <DependentUpon>BillboardView.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
 </Project>

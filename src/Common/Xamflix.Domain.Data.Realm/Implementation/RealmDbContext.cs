@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Realms;
 
@@ -94,6 +95,12 @@ namespace Xamflix.Domain.Data.Realm.Implementation
         {
             Realms.Realm realm = await GetRealmAsync();
             await this.RunInTransactionAsync(_ => realm.RemoveRange(items), transaction);
+        }
+
+        public async Task<bool> SynchronizeAsync(CancellationToken token = default)
+        {
+            Realms.Realm realm = await GetRealmAsync();
+            return await realm.RefreshAsync();
         }
 
         private async Task<Realms.Realm> GetRealmAsync()

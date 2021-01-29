@@ -8,15 +8,17 @@ using MediaManager.Media;
 using MediaManager.Playback;
 using MediaManager.Player;
 using Xamarin.Forms;
+using Xamflix.Core.AsyncVoid;
+using Xamflix.ViewModels.Dashboard;
 using PositionChangedEventArgs = MediaManager.Playback.PositionChangedEventArgs;
 
-namespace Xamflix.App.Forms
+namespace Xamflix.App.Forms.Pages.Dashboard
 {
-    public partial class MainPage
+    public partial class BillboardView
     {
         private bool _collapsed = false;
 
-        public MainPage()
+        public BillboardView()
         {
             InitializeComponent();
             CrossMediaManager.Current.BufferedChanged += CurrentOnBufferedChanged;
@@ -27,6 +29,22 @@ namespace Xamflix.App.Forms
             CrossMediaManager.Current.StateChanged += CurrentOnStateChanged;
         }
 
+        public void Play()
+        {
+            var dashboardViewModel = (IDashboardViewModel) BindingContext;
+            string? billboardMovieStreamingUrl = dashboardViewModel.Dashboard?.BillboardMovie?.StreamingUrl;
+            if(billboardMovieStreamingUrl != null)
+            {
+                var media = new MediaItem(billboardMovieStreamingUrl)
+                            {
+                                MediaType = MediaType.Hls
+                            };
+                TrailerVideoView.Source = media;
+                Trace.WriteLine($"Setting media item  {JsonSerializer.Serialize(media)}");   
+            }
+        }
+        
+        [AsyncVoidCheckExemption("Bridging UI lifecycle with async code")]
         private async void CurrentOnStateChanged(object sender, StateChangedEventArgs e)
         {
             switch(e.State)
@@ -70,14 +88,7 @@ namespace Xamflix.App.Forms
         {
             Trace.WriteLine($"CurrentOnMediaItemFailed  {e.Buffered}");
         }
-
-        protected override async void OnAppearing()
-        {
-            base.OnAppearing();
-            await Task.Delay(1000);
-            Play();
-        }
-
+        
         private async Task ScaleDownTitleImageAsync()
         {
             await Task.Delay(7000);
@@ -162,7 +173,8 @@ namespace Xamflix.App.Forms
             await ScaleDownTitleImageAsync();
         }
 
-        private async void Button_Clicked(object sender, EventArgs e)
+        [AsyncVoidCheckExemption("Bridging UI lifecycle with async code")]
+        private async void RepeatButtonClicked(object sender, EventArgs e)
         {
             if(_collapsed)
             {
@@ -170,16 +182,6 @@ namespace Xamflix.App.Forms
             }
 
             Play();
-        }
-
-        private void Play()
-        {
-            var media = new MediaItem("https://xamflixdeveuams-usea.streaming.media.azure.net/ba1b04de-ad6d-46f0-8b5f-a1d36e49f005/Outside%20the%20wire.ism/manifest(format=m3u8-aapl)")
-                        {
-                            MediaType = MediaType.Hls
-                        };
-            TrailerVideoView.Source = media;
-            Trace.WriteLine($"Setting media item  {JsonSerializer.Serialize(media)}");
         }
     }
 }

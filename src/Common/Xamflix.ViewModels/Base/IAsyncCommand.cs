@@ -36,9 +36,8 @@ namespace Xamflix.ViewModels.Base
         ///     of
         ///     firing and forgetting.
         /// </summary>
-        /// <param name="param">Command parameter</param>
         /// <param name="token">The cancellation token</param>
         /// <returns></returns>
-        Task ExecuteAsync(object param, CancellationToken token = default);
+        Task ExecuteAsync(CancellationToken token = default);
     }
 }

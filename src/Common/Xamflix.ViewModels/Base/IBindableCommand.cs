@@ -18,5 +18,7 @@ namespace Xamflix.ViewModels.Base
         ///     and allows to bind to the executable state of the command.
         /// </summary>
         bool IsExecutable { get; }
+
+        void Execute();
     }
 }

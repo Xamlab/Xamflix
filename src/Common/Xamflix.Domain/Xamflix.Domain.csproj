@@ -2,11 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>default</LangVersion>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Xamflix.Domain.Data\Xamflix.Domain.Data.csproj" />
     <ProjectReference Include="..\Xamflix.Domain.Models\Xamflix.Domain.Models.csproj" />
   </ItemGroup>
 

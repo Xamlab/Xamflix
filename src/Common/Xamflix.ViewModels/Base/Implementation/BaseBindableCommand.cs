@@ -26,7 +26,14 @@ namespace Xamflix.ViewModels.Base.Implementation
             return _canExecute;
         }
 
-        public abstract void Execute(object parameter);
+        public virtual void Execute()
+        {
+        }
+
+        public void Execute(object parameter)
+        {
+            Execute();
+        }
 
         /// <summary>
         ///     Sets the executable state of the command, and also <see cref="IsExecutable" /> property. In case there are
