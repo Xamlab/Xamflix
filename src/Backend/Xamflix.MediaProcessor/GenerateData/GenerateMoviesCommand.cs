@@ -19,7 +19,7 @@ namespace Xamflix.MediaProcessor.GenerateData
             _realmFactory = realmFactory;
         }
 
-        public IPipelineCommand<GenerateDataContext, GenerateDataResult> Next { get; set; }
+        public IPipelineCommand<GenerateDataContext, GenerateDataResult> Next { get; set; } = null!;
 
         public async Task<GenerateDataResult> ExecuteAsync(GenerateDataContext context, CancellationToken token = default)
         {
@@ -29,7 +29,7 @@ namespace Xamflix.MediaProcessor.GenerateData
                 using var realm = await _realmFactory.GetDefaultSyncedRealmAsync();
                 foreach(MovieImport movieImport in context.MovieImports)
                 {
-                    Movie createdMovie = null;
+                    Movie? createdMovie = null;
                     await realm.WriteAsync(r =>
                     {
                         var movie = r.All<Movie>().FirstOrDefault(m => m.Name == movieImport.Name
@@ -78,7 +78,7 @@ namespace Xamflix.MediaProcessor.GenerateData
 
                         createdMovie = movie;
                     });
-                    context.Movies[movieImport] = createdMovie.Id;
+                    context.Movies[movieImport] = createdMovie!.Id;
                 }
                 
                 Console.WriteLine("Movies generated successfully");

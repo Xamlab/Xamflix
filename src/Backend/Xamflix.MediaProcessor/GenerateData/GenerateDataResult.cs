@@ -21,7 +21,7 @@ namespace Xamflix.MediaProcessor.GenerateData
         }
 
         public bool IsSuccessful { get; }
-        public string FailureMessage { get; }
-        public Exception Exception { get; }
+        public string? FailureMessage { get; }
+        public Exception? Exception { get; }
     }
 }

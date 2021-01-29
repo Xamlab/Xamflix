@@ -17,7 +17,7 @@ namespace Xamflix.MediaProcessor.GenerateData
         
         public string ImportRootDir { get; }
         public string PartitionKey { get; }
-        public MovieImport[] MovieImports { get; set; }
+        public MovieImport[] MovieImports { get; set; } = null!;
         public Dictionary<string, ObjectId> People { get; } = new();
         public Dictionary<string, ObjectId> Categories { get; } = new();
         public Dictionary<string, ObjectId> Genres { get; } = new();

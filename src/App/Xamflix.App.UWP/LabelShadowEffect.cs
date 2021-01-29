@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
-using Windows.UI.Xaml.Controls;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.UWP;
-using Xamflix.App.Forms.Effects;
 using Xamflix.App.UWP;
-using Grid = Xamarin.Forms.Grid;
 
 [assembly: ResolutionGroupName("MyCompany")]
 [assembly: ExportEffect(typeof(LabelShadowEffect), "LabelShadowEffect")]

@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Realms;
 
@@ -14,5 +15,6 @@ namespace Xamflix.Domain.Data
         Task UpdateItemAsync<T>(string id, Func<T, Task> updateAction, ITransaction transaction) where T : RealmObject;
         Task RemoveAsync<T>(T item, ITransaction transaction) where T : RealmObject;
         Task RemoveRangeAsync<T>(IQueryable<T> items, ITransaction transaction) where T : RealmObject;
+        Task<bool> SynchronizeAsync(CancellationToken token = default);
     }
 }

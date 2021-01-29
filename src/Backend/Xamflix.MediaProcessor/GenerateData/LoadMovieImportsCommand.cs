@@ -17,7 +17,7 @@ namespace Xamflix.MediaProcessor.GenerateData
         {
             _movieImportService = movieImportService;
         }
-        public IPipelineCommand<GenerateDataContext, GenerateDataResult> Next { get; set; }
+        public IPipelineCommand<GenerateDataContext, GenerateDataResult> Next { get; set; } = null!;
         
         public async Task<GenerateDataResult> ExecuteAsync(GenerateDataContext context, CancellationToken token = default)
         {
@@ -27,7 +27,7 @@ namespace Xamflix.MediaProcessor.GenerateData
                 var moviesFilePath = Path.Combine(context.ImportRootDir, "movies.csv");
                 var movieImports = await _movieImportService.GetMovieImportsAsync(moviesFilePath);
                 
-                context.MovieImports = movieImports as MovieImport[] ?? movieImports?.ToArray();
+                context.MovieImports = movieImports as MovieImport[] ?? movieImports.ToArray();
                 
                 if(context.MovieImports?.Any() != true)
                 {

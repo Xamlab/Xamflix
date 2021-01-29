@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <LangVersion>default</LangVersion>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Xamflix.Core\Xamflix.Core.csproj" />
+        <ProjectReference Include="..\Xamflix.Domain\Xamflix.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="PropertyChanged.Fody" Version="3.3.1" />
+        <PackageReference Include="Realm" Version="10.0.0-beta.6" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Remove="**\*.resx" />
+        <EmbeddedResource Include="**\*.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+        </EmbeddedResource>
+    </ItemGroup>
+    
+
+</Project>
