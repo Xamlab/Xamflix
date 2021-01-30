@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Xamarin.Forms;
-using Xamarin.Forms.Shapes;
 using Xamarin.Forms.Xaml;
+using Xamflix.App.Forms.Pages.Movie;
 using Xamflix.App.Forms.Services;
 using Xamflix.Core.AsyncVoid;
 using Xamflix.ViewModels.Dashboard;
@@ -15,7 +15,8 @@ namespace Xamflix.App.Forms.Pages.Dashboard
     public partial class DashboardPage
     {
         private readonly IDashboardViewModel _viewModel;
-        private Xamarin.Forms.Shapes.Rectangle? _currentRectangle = null;
+        private MovieDetailsPopupView? _detailsPopupView = null;
+        private BoxView? _background = null;
         private readonly IViewCoordinatesService _viewCoordinatesService;
 
         public DashboardPage()
@@ -46,20 +47,54 @@ namespace Xamflix.App.Forms.Pages.Dashboard
         private void MovieTapped(object sender, EventArgs e)
         {
             var view = (View) sender;
-            var positionInParent = _viewCoordinatesService.GetCoordinates(view);
-            var absoluteLayoutInParent = _viewCoordinatesService.GetCoordinates(RootLayout);
+            ShowPopupBackground();
+            ShowPopup(view);
+        }
 
-            if (_currentRectangle != null)
-            {
-                RootLayout.Children.Remove(_currentRectangle);
-            }
-            _currentRectangle = new Xamarin.Forms.Shapes.Rectangle
-            {
-                Background = Brush.Red
-            };
+        private void ShowPopup(View view)
+        {
+            var positionInParent = _viewCoordinatesService.GetCoordinates(view);
+            var absoluteLayoutInParent = _viewCoordinatesService.GetCoordinates(SizerView);
+
+            _detailsPopupView = new MovieDetailsPopupView((Domain.Models.Movie)view.BindingContext);
+
             var absoluteX = positionInParent.X - absoluteLayoutInParent.X;
             var absoluteY = positionInParent.Y - absoluteLayoutInParent.Y;
-            RootLayout.Children.Add(_currentRectangle, new Rectangle(absoluteX, absoluteY, view.Width, view.Height));
+            var popupInitialFrame = new Rectangle((int)absoluteX, (int)absoluteY, (int)view.Width, (int)view.Height);
+            RootLayout.Children.Add(_detailsPopupView, popupInitialFrame);
+            _detailsPopupView.Open(this, popupInitialFrame, RootLayout.Width, RootLayout.Height);
+        }
+
+        private void ShowPopupBackground()
+        {
+            _background ??= new BoxView
+            {
+                BackgroundColor = Color.Black,
+                Opacity = 0,
+                GestureRecognizers = { new TapGestureRecognizer
+                {
+                    Command = new Command(HidePopup)
+                }}
+            };
+            RootLayout.Children.Add(_background, new Rectangle(0,0,1,1), AbsoluteLayoutFlags.All);
+            _background.Animate("BackgroundFadeIn", v => _background.Opacity = v, 0, 0.8);
+        }
+
+        private void HidePopup()
+        {
+            _background?.Animate("BackgroundFadeOut", 
+                v => _background.Opacity = v, 0.8, 0, 
+                finished:(x1, x2) =>
+                {
+                    RootLayout.Children.Remove(_background);
+                    _background = null;
+                });
+
+            _detailsPopupView?.Close(this, () =>
+            {
+                RootLayout.Children.Remove(_detailsPopupView);
+                _detailsPopupView = null;
+            });
         }
     }
 }

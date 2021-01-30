@@ -7,5 +7,6 @@
 
     <converters:VisibilityConverter x:Key="VisibilityConverter" />
     <converters:InverseVisibilityConverter x:Key="InverseVisibilityConverter" />
+    <converters:SecondsToFormattedDurationConverter x:Key="SecondsToFormattedDurationConverter" />
 
 </ResourceDictionary>

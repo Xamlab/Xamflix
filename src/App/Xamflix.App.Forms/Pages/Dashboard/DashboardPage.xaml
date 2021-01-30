@@ -16,6 +16,11 @@
             Padding="0"
             HorizontalOptions="FillAndExpand"
             VerticalOptions="FillAndExpand">
+            <BoxView 
+                x:Name="SizerView"
+                AbsoluteLayout.LayoutBounds="0,0,1,1"
+                AbsoluteLayout.LayoutFlags="All"
+                BackgroundColor="Transparent"/>
             <CollectionView
                 HorizontalScrollBarVisibility="Always"
                 ItemsSource="{Binding Dashboard.Categories}"
