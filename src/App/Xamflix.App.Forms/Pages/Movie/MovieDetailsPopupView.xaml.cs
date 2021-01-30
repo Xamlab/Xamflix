@@ -44,7 +44,7 @@ namespace Xamflix.App.Forms.Pages.Movie
             var marginLarge = 100;
             var marginSmall = 50;
             var aspectRatio = 16.0 / 10.0;
-            var maxHeight = 400;
+            var maxHeight = 600;
             var maxWidth = maxHeight * aspectRatio;
 
             double width, height;
