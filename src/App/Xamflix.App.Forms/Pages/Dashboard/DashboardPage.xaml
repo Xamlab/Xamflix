@@ -11,15 +11,16 @@
     x:DataType="dashboard1:IDashboardViewModel"
     BackgroundColor="Black">
     <ContentPage.Content>
-        <Grid
+        <AbsoluteLayout
+            x:Name="RootLayout"
             Padding="0"
             HorizontalOptions="FillAndExpand"
             VerticalOptions="FillAndExpand">
             <CollectionView
                 HorizontalScrollBarVisibility="Always"
                 ItemsSource="{Binding Dashboard.Categories}"
-                HorizontalOptions="FillAndExpand"
-                VerticalOptions="FillAndExpand">
+                AbsoluteLayout.LayoutBounds="0,0,1,1"
+                AbsoluteLayout.LayoutFlags="All">
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout
                         Orientation="Vertical"
@@ -77,6 +78,9 @@
                                                 WidthRequest="290"
                                                 Aspect="AspectFill"
                                                 Source="{Binding ThumbnailImageUrl}" />
+                                            <Frame.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="MovieTapped"></TapGestureRecognizer>
+                                            </Frame.GestureRecognizers>
                                         </Frame>
                                     </DataTemplate>
                                 </CollectionView.ItemTemplate>
@@ -89,8 +93,8 @@
             <ActivityIndicator
                 IsVisible="{Binding LoadCommand.IsBusy}"
                 IsRunning="{Binding LoadCommand.IsBusy}"
-                HorizontalOptions="Center"
-                VerticalOptions="Center" />
-        </Grid>
+                AbsoluteLayout.LayoutBounds="0.5,0.5,200,25"
+                AbsoluteLayout.LayoutFlags="PositionProportional" />
+        </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

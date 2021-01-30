@@ -46,12 +46,4 @@
     <ProjectReference Include="..\..\Common\Xamflix.ViewModels\Xamflix.ViewModels.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <!--<SharedImage Include="Resources\Images\info.svg" BaseSize="29,29" />
-    <SharedImage Include="Resources\Images\mute.svg" BaseSize="31,31" />
-    <SharedImage Include="Resources\Images\play.svg" BaseSize="31,31" />
-    <SharedImage Include="Resources\Images\repeat.svg" BaseSize="31,31" />-->
-    <!--<SharedImage Include="Resources\Images\unMute.svg" BaseSize="31,31" />-->
-  </ItemGroup>
-
 </Project>
