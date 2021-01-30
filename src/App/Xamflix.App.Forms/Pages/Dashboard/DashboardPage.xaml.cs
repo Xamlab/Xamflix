@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using MediaManager;
 using Microsoft.Extensions.DependencyInjection;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -53,6 +54,7 @@ namespace Xamflix.App.Forms.Pages.Dashboard
 
         private void ShowPopup(View view)
         {
+            CrossMediaManager.Current.Stop();
             var positionInParent = _viewCoordinatesService.GetCoordinates(view);
             var absoluteLayoutInParent = _viewCoordinatesService.GetCoordinates(SizerView);
 

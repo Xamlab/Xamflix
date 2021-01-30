@@ -3,6 +3,8 @@
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:models="clr-namespace:Xamflix.Domain.Models;assembly=Xamflix.Domain.Models"
        xmlns:shapes="clr-namespace:Xamarin.Forms.Shapes;assembly=Xamarin.Forms.Core"
+       xmlns:forms="clr-namespace:MediaManager.Forms;assembly=MediaManager.Forms"
+       xmlns:markupExtensions="clr-namespace:Xamflix.App.Forms.MarkupExtensions;assembly=Xamflix.App.Forms"
        x:Class="Xamflix.App.Forms.Pages.Movie.MovieDetailsPopupView"
        Padding="0"
        CornerRadius="5"
@@ -24,6 +26,17 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+        <forms:VideoView
+            x:Name="TrailerVideoView"
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.RowSpan="2"
+            Grid.ColumnSpan="2"
+            AutoPlay="True"
+            ShowControls="False"
+            VideoAspect="AspectFill"
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="FillAndExpand"/>
         <Image
             Grid.Row="0"
             Grid.Column="0"
@@ -45,8 +58,8 @@
             HorizontalOptions="Fill"
             VerticalOptions="Fill"
             Aspect="AspectFill" />
-
         <ContentView
+            x:Name="GradientOverlay"
             Grid.Row="1"
             Grid.Column="0"
             Grid.ColumnSpan="2"
@@ -62,6 +75,50 @@
             </ContentView.Background>
         </ContentView>
 
+        <StackLayout
+            x:Name="VideoControls"
+            Grid.Row="0"
+            Grid.Column="1"
+            Grid.RowSpan="2"
+            Orientation="Horizontal"
+            Spacing="5"
+            Padding="0"
+            HeightRequest="40"
+            Margin="0,0,10,10"
+            VerticalOptions="End"
+            HorizontalOptions="End">
+            <Button
+                BackgroundColor="#545457"
+                Clicked="RepeatButtonClicked"
+                BorderColor="White"
+                BorderWidth="1"
+                WidthRequest="40"
+                HeightRequest="40"
+                CornerRadius="20"
+                ImageSource="{markupExtensions:ImageResource repeat}"
+                Opacity="0.5"
+                TextColor="White"/>
+            <Line
+                X1="0"
+                Y1="5"
+                X2="0"
+                Y2="35"
+                Stroke="White"
+                Opacity="0.5"
+                StrokeThickness="2" />
+            <Button
+                x:Name="MuteButton"
+                Clicked="MuteButtonClicked"
+                BackgroundColor="#545457"
+                BorderColor="White"
+                BorderWidth="1"
+                WidthRequest="40"
+                HeightRequest="40"
+                CornerRadius="20"
+                ImageSource="{markupExtensions:ImageResource unMute}"
+                Opacity="0.5"
+                TextColor="White" />
+        </StackLayout>
         <Image
             Grid.Row="0"
             Grid.RowSpan="2"

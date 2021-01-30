@@ -16,11 +16,11 @@ namespace Xamflix.App.Forms.Pages.Dashboard
     public partial class BillboardView
     {
         private bool _collapsed;
+        private bool _isPlaying;
 
         public BillboardView()
         {
             InitializeComponent();
-            CrossMediaManager.Current.StateChanged += CurrentOnStateChanged;
         }
 
         public void Play()
@@ -30,6 +30,7 @@ namespace Xamflix.App.Forms.Pages.Dashboard
             var billboardMovieStreamingUrl = dashboardViewModel.Dashboard?.BillboardMovie?.StreamingUrl;
             if (billboardMovieStreamingUrl == null) return;
 
+            CrossMediaManager.Current.StateChanged += CurrentOnStateChanged;
             var media = new MediaItem(billboardMovieStreamingUrl)
             {
                 MediaType = MediaType.Hls
@@ -46,18 +47,21 @@ namespace Xamflix.App.Forms.Pages.Dashboard
             {
                 case MediaPlayerState.Playing:
                 {
+                    _isPlaying = true;
                     await PosterImage.FadeTo(0);
                     await Animate();
                     break;
                 }
-                case MediaPlayerState.Stopped:
-                {
-                    await ScaleOutTitleImageAsync();
-                    break;
-                }
                 default:
                 {
-                    await PosterImage.FadeTo(1);
+                    if (_isPlaying)
+                    {
+                        CrossMediaManager.Current.StateChanged -= CurrentOnStateChanged;
+                        _isPlaying = false;
+                        await ScaleOutTitleImageAsync();
+                        await PosterImage.FadeTo(1);
+                    }
+
                     break;
                 }
             }
