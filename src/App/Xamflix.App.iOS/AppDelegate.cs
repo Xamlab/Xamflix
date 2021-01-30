@@ -25,7 +25,7 @@ namespace Xamflix.App.iOS
             
             Forms.Bootstrapper.CreateContainer()
                  .RegisterFormsDependencies()
-                 .RegisterIosDependencies()
+                 .AddIos()
                  .BuildContainer();
 
             var application = new Forms.App();

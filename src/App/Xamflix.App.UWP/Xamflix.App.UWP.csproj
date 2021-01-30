@@ -99,6 +99,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Implementation\SystemPathService.cs" />
+    <Compile Include="Services\Implementation\ViewCoordinatesService.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

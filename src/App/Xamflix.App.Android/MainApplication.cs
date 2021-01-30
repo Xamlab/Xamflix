@@ -19,7 +19,7 @@ namespace Xamflix.App.Droid
             base.OnCreate();
             Forms.Bootstrapper.CreateContainer()
                  .RegisterFormsDependencies()
-                 .RegisterAndroidDependencies()
+                 .AddAndroid()
                  .BuildContainer();
         }
 

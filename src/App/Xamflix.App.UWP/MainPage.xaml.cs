@@ -11,7 +11,7 @@ namespace Xamflix.App.UWP
             
             Forms.Bootstrapper.CreateContainer()
                  .RegisterFormsDependencies()
-                 .RegisterUWPDependencies()
+                 .AddUwp()
                  .BuildContainer();
             
             CrossMediaManager.Current.Init();

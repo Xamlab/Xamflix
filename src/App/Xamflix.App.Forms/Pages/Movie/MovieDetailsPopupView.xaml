@@ -1,0 +1,177 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Frame xmlns="http://xamarin.com/schemas/2014/forms" 
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:models="clr-namespace:Xamflix.Domain.Models;assembly=Xamflix.Domain.Models"
+       xmlns:shapes="clr-namespace:Xamarin.Forms.Shapes;assembly=Xamarin.Forms.Core"
+       xmlns:forms="clr-namespace:MediaManager.Forms;assembly=MediaManager.Forms"
+       xmlns:markupExtensions="clr-namespace:Xamflix.App.Forms.MarkupExtensions;assembly=Xamflix.App.Forms"
+       x:Class="Xamflix.App.Forms.Pages.Movie.MovieDetailsPopupView"
+       Padding="0"
+       CornerRadius="5"
+       HasShadow="True"
+       BackgroundColor="#88545457"
+       IsClippedToBounds="True"
+       x:DataType="models:Movie">
+    <Grid
+        RowSpacing="0"
+        ColumnSpacing="0"
+        HorizontalOptions="Fill"
+        VerticalOptions="Fill">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <forms:VideoView
+            x:Name="TrailerVideoView"
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.RowSpan="2"
+            Grid.ColumnSpan="2"
+            AutoPlay="True"
+            ShowControls="False"
+            VideoAspect="AspectFill"
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="FillAndExpand"/>
+        <Image
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Grid.RowSpan="2"
+            x:Name="MovieThumbnailImage"
+            Source="{Binding ThumbnailImageUrl}"
+            HorizontalOptions="Fill"
+            VerticalOptions="Fill"
+            Aspect="AspectFill" />
+        <Image
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.RowSpan="2"
+            Grid.ColumnSpan="2"
+            x:Name="MoviePosterImage"
+            Source="{Binding PosterImageUrl}"
+            Opacity="0"
+            HorizontalOptions="Fill"
+            VerticalOptions="Fill"
+            Aspect="AspectFill" />
+        <ContentView
+            x:Name="GradientOverlay"
+            Grid.Row="1"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            HeightRequest="60"
+            HorizontalOptions="FillAndExpand">
+            <ContentView.Background>
+                <LinearGradientBrush 
+                    StartPoint="0,0"
+                    EndPoint="0,1">
+                    <GradientStop Color="#00000000" Offset="0"/>
+                    <GradientStop Color="#181818" Offset="0.9"/>
+                </LinearGradientBrush>
+            </ContentView.Background>
+        </ContentView>
+
+        <StackLayout
+            x:Name="VideoControls"
+            Grid.Row="0"
+            Grid.Column="1"
+            Grid.RowSpan="2"
+            Orientation="Horizontal"
+            Spacing="5"
+            Padding="0"
+            HeightRequest="40"
+            Margin="0,0,10,10"
+            VerticalOptions="End"
+            HorizontalOptions="End">
+            <Button
+                BackgroundColor="#545457"
+                Clicked="RepeatButtonClicked"
+                BorderColor="White"
+                BorderWidth="1"
+                WidthRequest="40"
+                HeightRequest="40"
+                CornerRadius="20"
+                ImageSource="{markupExtensions:ImageResource repeat}"
+                Opacity="0.5"
+                TextColor="White"/>
+            <Line
+                X1="0"
+                Y1="5"
+                X2="0"
+                Y2="35"
+                Stroke="White"
+                Opacity="0.5"
+                StrokeThickness="2" />
+            <Button
+                x:Name="MuteButton"
+                Clicked="MuteButtonClicked"
+                BackgroundColor="#545457"
+                BorderColor="White"
+                BorderWidth="1"
+                WidthRequest="40"
+                HeightRequest="40"
+                CornerRadius="20"
+                ImageSource="{markupExtensions:ImageResource unMute}"
+                Opacity="0.5"
+                TextColor="White" />
+        </StackLayout>
+        <Image
+            Grid.Row="0"
+            Grid.RowSpan="2"
+            Grid.Column="0"
+            x:Name="MoviePosterTitleImage"
+            Source="{Binding PosterTitleImageUrl}"
+            Opacity="0"
+            Margin="10,0,10,0"
+            HorizontalOptions="Fill"
+            VerticalOptions="End"
+            Aspect="AspectFit" />
+
+        <Grid
+            Grid.Row="2"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            BackgroundColor="#181818"
+            HeightRequest="30"
+            Padding="10,5,10,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <FlexLayout
+                x:Name="DetailsLayout"
+                Opacity="0"
+                Direction="Row"
+                AlignItems="Center"
+                VerticalOptions="Center">
+                <Label
+                    TextColor="#46d369"
+                    FontAttributes="Bold"
+                    Text="{Binding Year}"
+                    VerticalTextAlignment="Center"/>
+                <Grid
+                    Margin="5,0,0,0"
+                    VerticalOptions="Center">
+                    <Label
+                        FontSize="8"
+                        TextColor="White"
+                        Text="{Binding MaturityRating, StringFormat='{0}+'}"
+                        Margin="2,1,2,1"/>
+                    <shapes:Rectangle 
+                        Fill="Transparent"
+                        Stroke="White"
+                        StrokeThickness="1"/>
+                </Grid>
+                <Label
+                    TextColor="White"
+                    Text="{Binding DurationInSeconds, Converter={StaticResource SecondsToFormattedDurationConverter}}"
+                    Margin="5,0,0,0"
+                    VerticalTextAlignment="Center"/>
+            </FlexLayout>
+        </Grid>
+    </Grid>
+</Frame>
