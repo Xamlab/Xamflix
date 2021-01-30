@@ -54,7 +54,10 @@ namespace Xamflix.App.Forms.Pages.Dashboard
 
         private void ShowPopup(View view)
         {
-            CrossMediaManager.Current.Stop();
+            if (CrossMediaManager.Current.IsPlaying())
+            {
+                CrossMediaManager.Current.Stop();
+            }
             var positionInParent = _viewCoordinatesService.GetCoordinates(view);
             var absoluteLayoutInParent = _viewCoordinatesService.GetCoordinates(SizerView);
 

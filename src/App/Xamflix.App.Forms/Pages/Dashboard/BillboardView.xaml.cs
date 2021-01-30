@@ -159,19 +159,5 @@ namespace Xamflix.App.Forms.Pages.Dashboard
 
             Play();
         }
-
-        private void MuteButtonClicked(object sender, EventArgs e)
-        {
-            if (CrossMediaManager.Current.Volume.Muted)
-            {
-                CrossMediaManager.Current.Volume.Muted = false;
-                MuteButton.ImageSource = "unMute".GetImageSource();
-            }
-            else
-            {
-                CrossMediaManager.Current.Volume.Muted = true;
-                MuteButton.ImageSource = "mute".GetImageSource();
-            }
-        }
     }
 }

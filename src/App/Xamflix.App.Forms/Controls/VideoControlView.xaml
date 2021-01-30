@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<StackLayout
+    xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:markupExtensions="clr-namespace:Xamflix.App.Forms.MarkupExtensions;assembly=Xamflix.App.Forms"
+    x:Class="Xamflix.App.Forms.Controls.VideoControlView"
+    Orientation="Horizontal"
+    Spacing="8"
+    Padding="0">
+    <Button
+        BackgroundColor="#545457"
+        Clicked="RepeatButtonClicked"
+        BorderColor="White"
+        BorderWidth="2"
+        WidthRequest="60"
+        HeightRequest="60"
+        CornerRadius="30"
+        ImageSource="{markupExtensions:ImageResource repeat}"
+        Opacity="0.5"
+        TextColor="White" 
+        VerticalOptions="Fill"/>
+    <Line
+        X1="0"
+        Y1="8"
+        X2="0"
+        Y2="52"
+        Stroke="White"
+        StrokeThickness="2" />
+    <Button
+        x:Name="MuteButton"
+        BackgroundColor="#545457"
+        Clicked="MuteButtonClicked"
+        BorderColor="White"
+        BorderWidth="2"
+        WidthRequest="60"
+        HeightRequest="60"
+        CornerRadius="30"
+        ImageSource="{markupExtensions:ImageResource unMute}"
+        Opacity="0.5"
+        TextColor="White" 
+        VerticalOptions="Fill"/>
+</StackLayout>

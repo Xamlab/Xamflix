@@ -5,6 +5,7 @@
        xmlns:shapes="clr-namespace:Xamarin.Forms.Shapes;assembly=Xamarin.Forms.Core"
        xmlns:forms="clr-namespace:MediaManager.Forms;assembly=MediaManager.Forms"
        xmlns:markupExtensions="clr-namespace:Xamflix.App.Forms.MarkupExtensions;assembly=Xamflix.App.Forms"
+       xmlns:controls="clr-namespace:Xamflix.App.Forms.Controls;assembly=Xamflix.App.Forms"
        x:Class="Xamflix.App.Forms.Pages.Movie.MovieDetailsPopupView"
        Padding="0"
        CornerRadius="5"
@@ -75,50 +76,17 @@
             </ContentView.Background>
         </ContentView>
 
-        <StackLayout
+        <controls:VideoControlView
             x:Name="VideoControls"
             Grid.Row="0"
             Grid.Column="1"
             Grid.RowSpan="2"
-            Orientation="Horizontal"
-            Spacing="5"
-            Padding="0"
-            HeightRequest="40"
+            RepeatClicked="RepeatButtonClicked"
+            Opacity="0"
             Margin="0,0,10,10"
             VerticalOptions="End"
-            HorizontalOptions="End">
-            <Button
-                BackgroundColor="#545457"
-                Clicked="RepeatButtonClicked"
-                BorderColor="White"
-                BorderWidth="1"
-                WidthRequest="40"
-                HeightRequest="40"
-                CornerRadius="20"
-                ImageSource="{markupExtensions:ImageResource repeat}"
-                Opacity="0.5"
-                TextColor="White"/>
-            <Line
-                X1="0"
-                Y1="5"
-                X2="0"
-                Y2="35"
-                Stroke="White"
-                Opacity="0.5"
-                StrokeThickness="2" />
-            <Button
-                x:Name="MuteButton"
-                Clicked="MuteButtonClicked"
-                BackgroundColor="#545457"
-                BorderColor="White"
-                BorderWidth="1"
-                WidthRequest="40"
-                HeightRequest="40"
-                CornerRadius="20"
-                ImageSource="{markupExtensions:ImageResource unMute}"
-                Opacity="0.5"
-                TextColor="White" />
-        </StackLayout>
+            HorizontalOptions="End"/>
+
         <Image
             Grid.Row="0"
             Grid.RowSpan="2"
@@ -157,7 +125,7 @@
                     Margin="5,0,0,0"
                     VerticalOptions="Center">
                     <Label
-                        FontSize="8"
+                        FontSize="12"
                         TextColor="White"
                         Text="{Binding MaturityRating, StringFormat='{0}+'}"
                         Margin="2,1,2,1"/>

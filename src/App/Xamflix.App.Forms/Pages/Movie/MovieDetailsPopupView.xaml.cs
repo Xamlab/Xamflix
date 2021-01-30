@@ -18,15 +18,22 @@ namespace Xamflix.App.Forms.Pages.Movie
         private readonly Domain.Models.Movie _movie;
         private bool _isPlaying;
         private CancellationTokenSource _delayCancellationTokenSource;
+
+        private double _sourceX;
+        private double _sourceY;
+        private double _deltaX;
+        private double _deltaY;
+
+        private double _sourceWidth;
+        private double _sourceHeight;
+        private double _deltaWidth;
+        private double _deltaHeight;
+
         public MovieDetailsPopupView(Domain.Models.Movie movie)
         {
             _movie = movie;
             InitializeComponent();
             BindingContext = movie;
-            if (Device.RuntimePlatform == Device.UWP)
-            {
-                VideoControls.IsVisible = false;
-            }
         }
 
         public void Open(IAnimatable owner, Rectangle source, double parentWidth, double parentHeight)
@@ -34,48 +41,79 @@ namespace Xamflix.App.Forms.Pages.Movie
             var parentAnimation = new Animation();
             _delayCancellationTokenSource = new CancellationTokenSource();
             // Title Image
-            var deltaX = (parentWidth - source.Width) / 2 - source.X;
-            var deltaY = (parentHeight - source.Height) / 2 - source.Y;
-            var scaleX = new Animation(v => ScaleX = v, 1, 2.5, Easing.CubicIn);
-            var scaleY = new Animation(v => ScaleY = v, 1, 3, Easing.CubicIn);
-            var moveToCenterX = new Animation(v => TranslationX = v, 0, deltaX, Easing.CubicIn);
-            var moveToCenterY = new Animation(v => TranslationY = v, 0, deltaY, Easing.CubicIn);
+            var marginLarge = 100;
+            var marginSmall = 50;
+            var aspectRatio = 16.0 / 10.0;
+            var maxHeight = 600;
+            var maxWidth = maxHeight * aspectRatio;
+
+            double width, height;
+            if (parentWidth > parentHeight)
+            {
+                height = Math.Min(parentHeight - 2*marginSmall, maxHeight);
+                width = Math.Min(height * aspectRatio, parentWidth - 2*marginLarge);
+            }
+            else
+            {
+                width = Math.Min(parentWidth - 2*marginSmall, maxWidth);
+                height = Math.Min(width / aspectRatio, parentHeight - 2*marginLarge);
+            }
+            
+            var x = (parentWidth - width) / 2;
+            var y = (parentHeight - height) / 2;
+
+            _sourceX = source.X;
+            _sourceY = source.Y;
+            _deltaX = x - _sourceX;
+            _deltaY = y - _sourceY;
+
+            _sourceWidth = source.Width;
+            _sourceHeight = source.Height;
+            _deltaWidth = width - _sourceWidth;
+            _deltaHeight = height - _sourceHeight;
+
+            var scale = new Animation(v => AbsoluteLayout.SetLayoutBounds(this, 
+                new Rectangle(_sourceX + v*_deltaX, 
+                    _sourceY + v*_deltaY, 
+                    _sourceWidth + v*_deltaWidth, 
+                    _sourceHeight + v*_deltaHeight)), 0, 1, Easing.CubicIn);
+            
 
             var thumbnailFadeOut = new Animation(v => MovieThumbnailImage.Opacity = v, 1, 0, Easing.Linear);
             var posterImageFadeIn = new Animation(v => MoviePosterImage.Opacity = v, 0, 1, Easing.Linear);
+            var videoControlsFadeIn = new Animation(v => VideoControls.Opacity = v, 0, 1, Easing.Linear);
 
 
             var posterTitleImageFadeIn = new Animation(v => MoviePosterTitleImage.Opacity = v, 0, 1, Easing.Linear);
             var contentFadeIn = new Animation(v => DetailsLayout.Opacity = v, 0, 1, Easing.Linear);
 
-            parentAnimation.Add(0, 0.5, scaleX);
-            parentAnimation.Add(0, 0.5, scaleY);
-            parentAnimation.Add(0, 0.5, moveToCenterX);
-            parentAnimation.Add(0, 0.5, moveToCenterY);
+            parentAnimation.Add(0, 0.5, scale);
             parentAnimation.Add(0, 0.5, thumbnailFadeOut);
             parentAnimation.Add(0, 0.5, posterImageFadeIn);
             parentAnimation.Add(0.5, 1, posterTitleImageFadeIn);
             parentAnimation.Add(0.5, 1, contentFadeIn);
+            parentAnimation.Add(0.7, 1, videoControlsFadeIn);
 
             parentAnimation.Commit(owner, "OpenAnimation", length: 500);
 
-            if (Device.RuntimePlatform != Device.UWP)
-            {
-                Delay(Play, TimeSpan.FromSeconds(3));
-            }
+            Delay(Play, TimeSpan.FromSeconds(2));
         }
 
         public async Task Close(IAnimatable owner, Action completion)
         {
             _delayCancellationTokenSource.Cancel();
-            await CrossMediaManager.Current.Stop();
+            if (CrossMediaManager.Current.IsPlaying())
+            {
+                await CrossMediaManager.Current.Stop();
+            }
             var parentAnimation = new Animation();
 
             // Title Image
-            var scaleX = new Animation(v => ScaleX = v, ScaleX, 1, Easing.CubicInOut);
-            var scaleY = new Animation(v => ScaleY = v, ScaleY, 1, Easing.CubicOut);
-            var moveBackX = new Animation(v => TranslationX = v, TranslationX, 0, Easing.CubicOut);
-            var moveBackY = new Animation(v => TranslationY = v, TranslationY, 0, Easing.CubicOut);
+            var scale = new Animation(v => AbsoluteLayout.SetLayoutBounds(this,
+                new Rectangle(_sourceX + v * _deltaX,
+                    _sourceY + v * _deltaY,
+                    _sourceWidth + v * _deltaWidth,
+                    _sourceHeight + v * _deltaHeight)), 1, 0, Easing.CubicIn);
 
             var thumbnailFadeIn = new Animation(v => MovieThumbnailImage.Opacity = v, 0, 1, Easing.Linear);
             var posterImageFadeOut = new Animation(v => MoviePosterImage.Opacity = v, 1, 0, Easing.Linear);
@@ -83,13 +121,12 @@ namespace Xamflix.App.Forms.Pages.Movie
 
             var posterTitleImageFadeOut = new Animation(v => MoviePosterTitleImage.Opacity = v, 1, 0, Easing.Linear);
             var contentFadeOut = new Animation(v => DetailsLayout.Opacity = v, 1, 0, Easing.Linear);
+            var videoControlsFadeOut = new Animation(v => VideoControls.Opacity = v, 1, 0, Easing.Linear);
 
+            parentAnimation.Add(0, 0.3, videoControlsFadeOut);
             parentAnimation.Add(0, 0.5, posterTitleImageFadeOut);
             parentAnimation.Add(0, 0.5, contentFadeOut);
-            parentAnimation.Add(0.5, 0.8, scaleX);
-            parentAnimation.Add(0.5, 0.8, scaleY);
-            parentAnimation.Add(0.5, 0.8, moveBackX);
-            parentAnimation.Add(0.5, 0.8, moveBackY);
+            parentAnimation.Add(0.5, 0.8, scale);
             parentAnimation.Add(0.5, 0.8, posterImageFadeOut);
             parentAnimation.Add(0.8, 1, thumbnailFadeIn);
 
@@ -166,20 +203,6 @@ namespace Xamflix.App.Forms.Pages.Movie
         private void RepeatButtonClicked(object sender, EventArgs e)
         {
             Play();
-        }
-
-        private void MuteButtonClicked(object sender, EventArgs e)
-        {
-            if (CrossMediaManager.Current.Volume.Muted)
-            {
-                CrossMediaManager.Current.Volume.Muted = false;
-                MuteButton.ImageSource = "unMute".GetImageSource();
-            }
-            else
-            {
-                CrossMediaManager.Current.Volume.Muted = true;
-                MuteButton.ImageSource = "mute".GetImageSource();
-            }
         }
 
         [AsyncVoidCheckExemption("Bridging UI lifecycle with async code")]

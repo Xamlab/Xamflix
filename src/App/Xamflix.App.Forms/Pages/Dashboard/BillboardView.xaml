@@ -7,6 +7,7 @@
     xmlns:effects="clr-namespace:Xamflix.App.Forms.Effects;assembly=Xamflix.App.Forms"
     xmlns:dashboard="clr-namespace:Xamflix.ViewModels.Dashboard;assembly=Xamflix.ViewModels"
     xmlns:markupExtensions="clr-namespace:Xamflix.App.Forms.MarkupExtensions;assembly=Xamflix.App.Forms"
+    xmlns:controls="clr-namespace:Xamflix.App.Forms.Controls;assembly=Xamflix.App.Forms"
     x:DataType="dashboard:IDashboardViewModel"
     ColumnSpacing="10"
     RowSpacing="10">
@@ -130,46 +131,12 @@
             VerticalOptions="Fill"/>
     </StackLayout>
 
-    <StackLayout
+    <controls:VideoControlView
         Grid.Row="4"
         Grid.Column="1"
+        RepeatClicked="RepeatButtonClicked"
         Margin="0,0,80,0"
         Orientation="Horizontal"
-        Spacing="8"
-        Padding="0"
         HorizontalOptions="End"
-        VerticalOptions="Center">
-        <Button
-            BackgroundColor="#545457"
-            Clicked="RepeatButtonClicked"
-            BorderColor="White"
-            BorderWidth="2"
-            WidthRequest="60"
-            HeightRequest="60"
-            CornerRadius="30"
-            ImageSource="{markupExtensions:ImageResource repeat}"
-            Opacity="0.5"
-            TextColor="White" 
-            VerticalOptions="Fill"/>
-        <Line
-            X1="0"
-            Y1="8"
-            X2="0"
-            Y2="52"
-            Stroke="White"
-            StrokeThickness="2" />
-        <Button
-            x:Name="MuteButton"
-            BackgroundColor="#545457"
-            Clicked="MuteButtonClicked"
-            BorderColor="White"
-            BorderWidth="2"
-            WidthRequest="60"
-            HeightRequest="60"
-            CornerRadius="30"
-            ImageSource="{markupExtensions:ImageResource unMute}"
-            Opacity="0.5"
-            TextColor="White" 
-            VerticalOptions="Fill"/>
-    </StackLayout>
+        VerticalOptions="Center"/>
 </Grid>
