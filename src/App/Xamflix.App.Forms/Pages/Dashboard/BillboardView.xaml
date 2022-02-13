@@ -42,7 +42,7 @@
         Grid.ColumnSpan="2"
         Aspect="AspectFill"
         HorizontalOptions="FillAndExpand"
-        Source="{Binding Dashboard.BillboardMovie.BillboardPosterImageUrl}"
+        Source="{Binding Dashboard.BillboardMovie.BillboardPosterImageUrl, Converter={StaticResource EscapeUrlsConverter}}"
         VerticalOptions="FillAndExpand" />
     <Image
         x:Name="TitleImage"
@@ -51,7 +51,7 @@
         Grid.ColumnSpan="2"
         AnchorX="0"
         AnchorY="2.5"
-        Source="{Binding Dashboard.BillboardMovie.PosterTitleImageUrl}"
+        Source="{Binding Dashboard.BillboardMovie.PosterTitleImageUrl, Converter={StaticResource EscapeUrlsConverter}}"
         Margin="20,0,0,0"
         HeightRequest="247"
         WidthRequest="617"

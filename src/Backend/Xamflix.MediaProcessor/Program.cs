@@ -19,9 +19,13 @@ namespace Xamflix.MediaProcessor
                                .BuildServiceProvider();
 
             var generateDataPipelineCommandFactory = Services.GetRequiredService<GenerateDataPipelineFactory>();
+            var generateDataContext = Services.GetRequiredService<GenerateDataContext>();
+            generateDataContext.ForceGenerateImages = false;
+            generateDataContext.ForceGenerateTrailers = true;
+            generateDataContext.MaxMovieTrailersToUpload = 10;
             var result = await generateDataPipelineCommandFactory
                                .CreateGenerateDataPipelineCommand()
-                               .ExecuteAsync(Services.GetRequiredService<GenerateDataContext>());
+                               .ExecuteAsync(generateDataContext);
             
             if(result.IsSuccessful)
             {

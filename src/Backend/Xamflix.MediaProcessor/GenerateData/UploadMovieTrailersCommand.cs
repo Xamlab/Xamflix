@@ -31,7 +31,7 @@ namespace Xamflix.MediaProcessor.GenerateData
         {
             Console.WriteLine("Uploading movie trailers");
             List<TaskResult<bool>> results = new();
-            for(int offset = 0; offset < context.MovieImports.Length; offset=results.Count)
+            for(int offset = 0; offset < context.MovieImports.Length && offset < context.MaxMovieTrailersToUpload; offset = results.Count)
             {
                 var uploadTasks = context.MovieImports
                                          .Skip(offset)
@@ -40,7 +40,7 @@ namespace Xamflix.MediaProcessor.GenerateData
                 var taskResults = await Task.WhenAll(uploadTasks);
                 results.AddRange(taskResults);
             }
-            
+
             var failedTasks = results.Where(t => !t.IsSuccessful).ToArray();
 
             if(failedTasks.Any())
@@ -64,7 +64,7 @@ namespace Xamflix.MediaProcessor.GenerateData
                                               TaskName = mediaName
                                           };
 
-            if(await CheckIfTrailerAlreadyExistsAsync(movieId))
+            if(!context.ForceGenerateTrailers && await CheckIfTrailerAlreadyExistsAsync(movieId))
             {
                 Console.WriteLine($"Movie trailer for {movieId} has already been uploaded");
                 taskResult.IsSuccessful = true;
@@ -75,12 +75,7 @@ namespace Xamflix.MediaProcessor.GenerateData
             {
                 var trailFilePath = Path.Combine(context.ImportRootDir, "Trailers", movieImport.TrailerFileName);
                 var streamingUrls = await _mediaService.EncodeVideoForStreaming(trailFilePath, mediaName);
-                using var realm = await _realmFactory.GetDefaultSyncedRealmAsync();
-                await realm.WriteAsync(r =>
-                {
-                    var movie = r.Find<Movie>(movieId);
-                    movie.StreamingUrl = streamingUrls.First(url => url.Contains("m3u8-aapl"));
-                });
+                context.MovieTrailers[mediaName] = streamingUrls.First(url => url.Contains("m3u8-aapl"));
                 taskResult.IsSuccessful = true;
                 taskResult.Result = true;
                 Console.WriteLine($"Successfully uploaded movie trailer for {movieId}");

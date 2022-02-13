@@ -8,5 +8,6 @@
     <converters:VisibilityConverter x:Key="VisibilityConverter" />
     <converters:InverseVisibilityConverter x:Key="InverseVisibilityConverter" />
     <converters:SecondsToFormattedDurationConverter x:Key="SecondsToFormattedDurationConverter" />
+    <converters:EscapeUrlsConverter x:Key="EscapeUrlsConverter" />
 
 </ResourceDictionary>

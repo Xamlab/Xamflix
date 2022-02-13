@@ -48,7 +48,7 @@
                         HeightRequest="570"
                         WidthRequest="290"
                         Aspect="AspectFill"
-                        Source="{Binding TallThumbnailImageUrl}" />
+                        Source="{Binding TallThumbnailImageUrl, Converter={StaticResource EscapeUrlsConverter}}" />
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer Tapped="MovieTappedHandler"></TapGestureRecognizer>
                     </Frame.GestureRecognizers>

@@ -57,7 +57,8 @@ namespace Xamflix.MediaProcessor.GenerateData
         {
             var uploadTasks = new List<Task<TaskResult<string>>>();
 
-            if(string.IsNullOrWhiteSpace(movie.PosterImageUrl) && !string.IsNullOrWhiteSpace(movieImport.PosterImageFileName))
+            if((string.IsNullOrWhiteSpace(movie.PosterImageUrl) || context.ForceGenerateImages) 
+               && !string.IsNullOrWhiteSpace(movieImport.PosterImageFileName))
             {
                 uploadTasks.Add(UploadImage(movie.Id,
                                             "Posters",
@@ -66,7 +67,8 @@ namespace Xamflix.MediaProcessor.GenerateData
                                             context));
             }
 
-            if(string.IsNullOrWhiteSpace(movie.PosterTitleImageUrl) && !string.IsNullOrWhiteSpace(movieImport.PosterTitleImageFileName))
+            if((string.IsNullOrWhiteSpace(movie.PosterTitleImageUrl)  || context.ForceGenerateImages) 
+               && !string.IsNullOrWhiteSpace(movieImport.PosterTitleImageFileName))
             {
                 uploadTasks.Add(UploadImage(movie.Id,
                                             "PosterTitles",
@@ -75,7 +77,8 @@ namespace Xamflix.MediaProcessor.GenerateData
                                             context));
             }
 
-            if(string.IsNullOrWhiteSpace(movie.ThumbnailImageUrl) && !string.IsNullOrWhiteSpace(movieImport.ThumbnailImageFileName))
+            if((string.IsNullOrWhiteSpace(movie.ThumbnailImageUrl) || context.ForceGenerateImages)
+                && !string.IsNullOrWhiteSpace(movieImport.ThumbnailImageFileName))
             {
                 uploadTasks.Add(UploadImage(movie.Id,
                                             "Thumbnails",
@@ -84,7 +87,8 @@ namespace Xamflix.MediaProcessor.GenerateData
                                             context));
             }
 
-            if(string.IsNullOrWhiteSpace(movie.TallThumbnailImageUrl) && !string.IsNullOrWhiteSpace(movieImport.TallThumbnailFileName))
+            if((string.IsNullOrWhiteSpace(movie.TallThumbnailImageUrl)  || context.ForceGenerateImages) 
+                && !string.IsNullOrWhiteSpace(movieImport.TallThumbnailFileName))
             {
                 uploadTasks.Add(UploadImage(movie.Id,
                                             "TallThumbnails",
@@ -93,7 +97,8 @@ namespace Xamflix.MediaProcessor.GenerateData
                                             context));
             }
             
-            if(string.IsNullOrWhiteSpace(movie.BillboardPosterImageUrl) && !string.IsNullOrWhiteSpace(movieImport.BillboardPosterImageFileName))
+            if((string.IsNullOrWhiteSpace(movie.BillboardPosterImageUrl)  || context.ForceGenerateImages)
+               && !string.IsNullOrWhiteSpace(movieImport.BillboardPosterImageFileName))
             {
                 uploadTasks.Add(UploadImage(movie.Id,
                                             "BillboardPosters",
@@ -102,7 +107,8 @@ namespace Xamflix.MediaProcessor.GenerateData
                                             context));
             }
             
-            if(string.IsNullOrWhiteSpace(movie.BillboardPosterTitleImageUrl) && !string.IsNullOrWhiteSpace(movieImport.BillboardPosterTitleImageFileName))
+            if((string.IsNullOrWhiteSpace(movie.BillboardPosterTitleImageUrl)  || context.ForceGenerateImages)
+               && !string.IsNullOrWhiteSpace(movieImport.BillboardPosterTitleImageFileName))
             {
                 uploadTasks.Add(UploadImage(movie.Id,
                                             "BillboardPosterTitles",
