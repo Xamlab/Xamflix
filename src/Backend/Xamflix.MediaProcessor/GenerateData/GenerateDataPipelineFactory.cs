@@ -51,8 +51,8 @@ namespace Xamflix.MediaProcessor.GenerateData
                 .ContinueWith(_generateGenresCommand)
                 .ContinueWith(_generateMoviesCommand)
                 .ContinueWith(_uploadMovieImagesCommand)
-                .ContinueWith(_uploadMovieTrailersCommand)
-                .ContinueWith(_updateMoviesWithTrailersCommand)
+                //.ContinueWith(_uploadMovieTrailersCommand)
+                //.ContinueWith(_updateMoviesWithTrailersCommand)
                 .ContinueWith(_buildBillboardCommand)
                 .ContinueWith(_finalRefreshRealmCommand);
             return _refreshRealmCommand;
